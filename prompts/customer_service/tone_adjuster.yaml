@@ -1,0 +1,92 @@
+name: tone_adjuster
+version: "1.0"
+category: customer_service
+description: "Adjust the tone of customer service responses to match the desired communication style and customer context"
+template: |
+  Adjust the tone of the following customer service response.
+
+  Current tone: {current_tone}
+  Target tone: {target_tone}
+  Customer context: {customer_context}
+  Brand voice: {brand_voice}
+
+  Original response:
+  {response}
+
+  Rewrite the response maintaining the same information but adjusting the tone to be {target_tone}.
+
+  Tone guidelines:
+
+  {%- if target_tone == "empathetic" %}
+  - Lead with understanding and validation
+  - Use phrases like "I understand how frustrating this must be"
+  - Soften negative information with positive framing
+  - Show genuine concern for the customer's experience
+  {%- endif %}
+
+  {%- if target_tone == "professional" %}
+  - Use formal but approachable language
+  - Be concise and fact-focused
+  - Avoid colloquialisms and casual expressions
+  - Maintain a respectful distance
+  {%- endif %}
+
+  {%- if target_tone == "friendly" %}
+  - Use warm, conversational language
+  - Include appropriate light touches of personality
+  - Use contractions and natural phrasing
+  - Be enthusiastic where appropriate
+  {%- endif %}
+
+  {%- if target_tone == "concise" %}
+  - Remove all unnecessary words and pleasantries
+  - Get to the point immediately
+  - Use bullet points for multiple items
+  - Keep under 100 words total
+  {%- endif %}
+
+  Provide:
+  1. **Adjusted response** - The rewritten response in the target tone
+  2. **Changes made** - What was changed and why
+  3. **Tone score** - Rate the original and adjusted versions:
+     - Empathy: 1-5
+     - Professionalism: 1-5
+     - Clarity: 1-5
+     - Warmth: 1-5
+parameters:
+  - name: response
+    type: string
+    required: true
+    description: "The original customer service response to adjust"
+  - name: current_tone
+    type: string
+    required: false
+    description: "The current tone of the response"
+    default: "auto-detect"
+  - name: target_tone
+    type: string
+    required: true
+    description: "The desired tone (empathetic, professional, friendly, concise, formal, casual, assertive)"
+  - name: customer_context
+    type: string
+    required: false
+    description: "Context about the customer (frustrated, new user, VIP, technical, non-technical)"
+    default: "general"
+  - name: brand_voice
+    type: string
+    required: false
+    description: "Brand voice guidelines or characteristics"
+    default: "professional and approachable"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 500
+  temperature: 0.5
+  tags: ["customer-service", "tone", "communication", "writing"]
+examples:
+  - input:
+      response: "Your ticket has been received. The issue you reported is a known bug. A fix is scheduled for the next release. ETA is 2 weeks. Your workaround options are: 1) clear browser cache, 2) use a different browser. Let us know if you need anything else."
+      current_tone: "robotic"
+      target_tone: "empathetic"
+      customer_context: "frustrated customer who reported the bug twice before"
+      brand_voice: "professional and approachable"
+    expected_output_contains: ["understand", "frustrating", "empathy", "tone score"]

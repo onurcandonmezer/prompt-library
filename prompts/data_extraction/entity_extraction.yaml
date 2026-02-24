@@ -1,0 +1,79 @@
+name: entity_extraction
+version: "1.0"
+category: data_extraction
+description: "Extract named entities (people, organizations, locations, dates, etc.) from unstructured text"
+template: |
+  Extract all named entities from the following text.
+
+  Entity types to extract: {entity_types}
+  Output format: {output_format}
+  Confidence threshold: {confidence}
+
+  Text:
+  {text}
+
+  For each entity found, provide:
+  - **Entity** - The exact text as it appears
+  - **Type** - Category (PERSON, ORGANIZATION, LOCATION, DATE, MONEY, PRODUCT, EVENT, etc.)
+  - **Normalized form** - Standardized version (e.g., "USA" -> "United States of America")
+  - **Context** - Brief context of how the entity is used in the text
+  - **Confidence** - High / Medium / Low
+
+  {%- if output_format == "json" %}
+  Output as a JSON array:
+  ```json
+  [
+    {{
+      "entity": "extracted text",
+      "type": "ENTITY_TYPE",
+      "normalized": "standardized form",
+      "context": "surrounding context",
+      "confidence": "high"
+    }}
+  ]
+  ```
+  {%- endif %}
+
+  {%- if output_format == "table" %}
+  Output as a markdown table:
+  | Entity | Type | Normalized | Context | Confidence |
+  |--------|------|------------|---------|------------|
+  {%- endif %}
+
+  Rules:
+  - Extract only entities above the {confidence} confidence threshold
+  - Resolve coreferences (e.g., "he" refers to [person name])
+  - Handle abbreviations and acronyms
+  - Do not fabricate entities not present in the text
+parameters:
+  - name: text
+    type: string
+    required: true
+    description: "The text to extract entities from"
+  - name: entity_types
+    type: string
+    required: false
+    description: "Types of entities to extract (all, people, organizations, locations, dates, money, products)"
+    default: "all"
+  - name: output_format
+    type: string
+    required: false
+    description: "Output format (json, table, list)"
+    default: "json"
+  - name: confidence
+    type: string
+    required: false
+    description: "Minimum confidence level to include (high, medium, low)"
+    default: "medium"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 600
+  temperature: 0.1
+  tags: ["data-extraction", "NER", "entities", "NLP"]
+examples:
+  - input:
+      text: "Apple CEO Tim Cook announced at the September 2025 event in Cupertino that the iPhone 17 will start at $999. The company partnered with Samsung for display manufacturing. Cook mentioned that revenue in Greater China grew 15% to $20 billion."
+      entity_types: "all"
+      output_format: "json"
+      confidence: "medium"
+    expected_output_contains: ["Apple", "Tim Cook", "PERSON", "ORGANIZATION", "Cupertino", "$999"]

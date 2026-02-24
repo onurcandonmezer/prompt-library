@@ -1,0 +1,48 @@
+name: email_digest
+version: "1.0"
+category: summarization
+description: "Create a consolidated digest from multiple email threads, highlighting priorities and required actions"
+template: |
+  You are an executive assistant. Create a digest summary from the following email thread(s).
+
+  Priority filter: {priority_filter}
+  Digest format: {format}
+
+  Email thread(s):
+  {emails}
+
+  Create a digest that includes:
+  1. **Priority Items** - Emails requiring immediate attention or response
+  2. **Action Required** - Specific actions you need to take, with deadlines
+  3. **FYI / Informational** - Updates that are good to know but non-urgent
+  4. **Pending Responses** - Emails awaiting replies from others
+  5. **Summary Statistics** - Total emails, senders, date range
+
+  For each item, include the sender, subject, and a one-line summary.
+  Flag anything that appears time-sensitive.
+parameters:
+  - name: emails
+    type: string
+    required: true
+    description: "The email thread content including headers (from, to, subject, date) and body"
+  - name: priority_filter
+    type: string
+    required: false
+    description: "Filter level (all, high-priority-only, action-required-only)"
+    default: "all"
+  - name: format
+    type: string
+    required: false
+    description: "Output format (detailed, brief, bullet-points)"
+    default: "detailed"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 700
+  temperature: 0.3
+  tags: ["summarization", "email", "productivity", "digest"]
+examples:
+  - input:
+      emails: "From: boss@company.com\nSubject: Q4 Budget Approval Needed\nDate: Mon 9am\nWe need your sign-off on the Q4 budget by Wednesday EOD.\n\n---\nFrom: hr@company.com\nSubject: Benefits Enrollment Reminder\nDate: Mon 11am\nOpen enrollment ends Friday. Please complete your selections.\n\n---\nFrom: vendor@external.com\nSubject: Invoice #4521\nDate: Mon 2pm\nPlease find attached invoice for October services. Payment due in 30 days."
+      priority_filter: "all"
+      format: "brief"
+    expected_output_contains: ["priority", "action", "budget", "enrollment"]

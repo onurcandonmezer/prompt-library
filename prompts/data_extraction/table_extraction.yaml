@@ -1,0 +1,74 @@
+name: table_extraction
+version: "1.0"
+category: data_extraction
+description: "Extract and structure tabular data from unstructured text, paragraphs, or semi-formatted content"
+template: |
+  Extract tabular data from the following text and structure it into a clean table.
+
+  Output format: {output_format}
+  Column hints: {column_hints}
+
+  Text:
+  {text}
+
+  Instructions:
+  1. Identify data that naturally forms rows and columns
+  2. Determine appropriate column headers based on the data patterns
+  3. Normalize data formats within each column for consistency
+  4. Handle merged cells, spanning data, or irregular formatting
+  5. Fill in missing values with "N/A" where data is absent
+
+  {%- if output_format == "markdown" %}
+  Output as a markdown table:
+  | Column 1 | Column 2 | Column 3 |
+  |----------|----------|----------|
+  | value    | value    | value    |
+  {%- endif %}
+
+  {%- if output_format == "csv" %}
+  Output as CSV:
+  ```csv
+  column1,column2,column3
+  value1,value2,value3
+  ```
+  {%- endif %}
+
+  {%- if output_format == "json" %}
+  Output as JSON array of objects:
+  ```json
+  [
+    {{"column1": "value1", "column2": "value2"}}
+  ]
+  ```
+  {%- endif %}
+
+  After the table, provide:
+  - **Data quality notes** - Any issues, inconsistencies, or assumptions made
+  - **Column descriptions** - Brief description of each column
+  - **Row count** - Total number of data rows extracted
+parameters:
+  - name: text
+    type: string
+    required: true
+    description: "The text containing tabular data to extract"
+  - name: output_format
+    type: string
+    required: false
+    description: "Output format (markdown, csv, json, tsv)"
+    default: "markdown"
+  - name: column_hints
+    type: string
+    required: false
+    description: "Hints about expected columns (comma-separated) or 'auto-detect'"
+    default: "auto-detect"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 600
+  temperature: 0.1
+  tags: ["data-extraction", "tables", "parsing", "structured-data"]
+examples:
+  - input:
+      text: "Our Q3 results by region: North America generated $15M in revenue with 200 customers and 12% growth. Europe brought in $8.5M from 150 customers, growing 18%. APAC contributed $4.2M with 80 customers and 25% growth. Latin America had $2.1M in revenue, 45 customers, and 30% growth."
+      output_format: "markdown"
+      column_hints: "region, revenue, customers, growth"
+    expected_output_contains: ["Region", "Revenue", "North America", "$15M", "APAC"]

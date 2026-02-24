@@ -1,0 +1,54 @@
+name: executive_summary
+version: "1.0"
+category: summarization
+description: "Summarize lengthy documents into concise executive summaries suitable for senior leadership and decision-makers"
+template: |
+  You are an expert business analyst. Create an executive summary of the following document.
+
+  Target audience: {audience}
+  Maximum length: {max_length} words
+  Focus areas: {focus_areas}
+
+  Document:
+  {document}
+
+  Structure your executive summary with:
+  1. **Overview** - One paragraph capturing the essence
+  2. **Key Findings** - 3-5 bullet points of critical findings
+  3. **Implications** - What this means for the organization
+  4. **Recommendations** - Actionable next steps
+  5. **Conclusion** - Brief closing statement
+
+  Keep the language professional, clear, and jargon-free where possible.
+parameters:
+  - name: document
+    type: string
+    required: true
+    description: "The full document text to be summarized"
+  - name: audience
+    type: string
+    required: false
+    description: "The target audience for the summary (e.g., C-suite, board members, project sponsors)"
+    default: "senior leadership"
+  - name: max_length
+    type: integer
+    required: false
+    description: "Maximum word count for the summary"
+    default: 300
+  - name: focus_areas
+    type: string
+    required: false
+    description: "Specific areas to emphasize in the summary"
+    default: "key outcomes, risks, and recommendations"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 600
+  temperature: 0.4
+  tags: ["summarization", "executive", "business", "leadership"]
+examples:
+  - input:
+      document: "Q3 2025 Financial Report: Revenue increased 15% YoY to $45M. Operating expenses rose 8% due to new hires. Net profit margin improved to 22%. Customer acquisition cost decreased by 12%. Three new enterprise clients onboarded. R&D spending allocated 30% to AI initiatives. Employee retention rate at 94%. Market share grew from 8% to 11% in the SaaS segment."
+      audience: "board of directors"
+      max_length: 200
+      focus_areas: "financial performance and growth metrics"
+    expected_output_contains: ["revenue", "profit", "growth", "recommendation"]

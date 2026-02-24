@@ -1,0 +1,58 @@
+name: article_summary
+version: "1.0"
+category: summarization
+description: "Summarize news articles or blog posts into concise, informative summaries preserving key facts and context"
+template: |
+  Summarize the following {article_type} article in a clear and informative way.
+
+  Target reading level: {reading_level}
+  Summary style: {style}
+
+  Article:
+  {article}
+
+  Your summary should:
+  - Capture the main thesis or news angle
+  - Include essential facts, figures, and quotes
+  - Preserve the context and significance of the topic
+  - Be written in {style} style
+  - Stay within {max_sentences} sentences
+
+  If the article contains opinions, clearly distinguish them from facts.
+parameters:
+  - name: article
+    type: string
+    required: true
+    description: "The full article text to summarize"
+  - name: article_type
+    type: string
+    required: false
+    description: "Type of article (news, blog, opinion, research, feature)"
+    default: "news"
+  - name: reading_level
+    type: string
+    required: false
+    description: "Target reading level (general public, professional, academic)"
+    default: "general public"
+  - name: style
+    type: string
+    required: false
+    description: "Summary style (neutral, analytical, conversational)"
+    default: "neutral"
+  - name: max_sentences
+    type: integer
+    required: false
+    description: "Maximum number of sentences in the summary"
+    default: 5
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 300
+  temperature: 0.3
+  tags: ["summarization", "articles", "news", "content"]
+examples:
+  - input:
+      article: "A new study published in Nature shows that global temperatures have risen 1.2 degrees Celsius since pre-industrial levels. Researchers from MIT and Oxford analyzed 50 years of satellite data. The findings suggest that current emission reduction pledges are insufficient to meet the Paris Agreement goals. Lead author Dr. Smith noted that immediate policy changes are needed to avoid catastrophic climate impacts by 2050."
+      article_type: "news"
+      style: "neutral"
+      max_sentences: 3
+    expected_output_contains: ["temperature", "study", "emissions"]

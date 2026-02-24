@@ -1,0 +1,55 @@
+name: technical_summary
+version: "1.0"
+category: summarization
+description: "Summarize technical documents, research papers, or specifications for both technical and non-technical audiences"
+template: |
+  Summarize the following technical document for a {target_audience} audience.
+
+  Technical domain: {domain}
+  Detail level: {detail_level}
+
+  Document:
+  {document}
+
+  Structure your summary as:
+  1. **Purpose** - What problem does this document address?
+  2. **Approach / Methodology** - How is the problem solved or addressed?
+  3. **Key Technical Details** - Important specifications, metrics, or parameters
+  4. **Results / Findings** - Main outcomes or conclusions
+  5. **Limitations** - Known constraints or caveats
+  6. **Impact** - Why this matters and potential applications
+
+  Adjust technical jargon based on the target audience. For non-technical audiences,
+  provide analogies where helpful. For technical audiences, preserve precise terminology.
+parameters:
+  - name: document
+    type: string
+    required: true
+    description: "The technical document to summarize"
+  - name: target_audience
+    type: string
+    required: false
+    description: "Target audience (technical, non-technical, mixed)"
+    default: "mixed"
+  - name: domain
+    type: string
+    required: false
+    description: "Technical domain (software, hardware, research, engineering, medical)"
+    default: "general"
+  - name: detail_level
+    type: string
+    required: false
+    description: "Level of detail (high, medium, low)"
+    default: "medium"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 700
+  temperature: 0.3
+  tags: ["summarization", "technical", "documentation", "research"]
+examples:
+  - input:
+      document: "This paper presents a novel transformer architecture for low-latency speech recognition. The model uses a modified attention mechanism with O(n log n) complexity instead of O(n^2). Trained on 10,000 hours of multilingual data, it achieves a WER of 3.2% on LibriSpeech, surpassing the previous SOTA by 15%. The model requires only 45M parameters, making it suitable for edge deployment. Inference time is 50ms on consumer GPUs."
+      target_audience: "non-technical"
+      domain: "software"
+      detail_level: "medium"
+    expected_output_contains: ["speech recognition", "faster", "accurate", "smaller"]

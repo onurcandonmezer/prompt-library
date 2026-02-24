@@ -1,0 +1,89 @@
+name: response_generator
+version: "1.0"
+category: customer_service
+description: "Generate professional, empathetic customer support responses tailored to the issue and customer emotion"
+template: |
+  Generate a customer support response for the following ticket.
+
+  Company name: {company_name}
+  Agent name: {agent_name}
+  Response style: {response_style}
+  Customer tier: {customer_tier}
+
+  Customer ticket:
+  {ticket}
+
+  Resolution information:
+  {resolution}
+
+  Compose a response that:
+  1. **Acknowledges** - Show you understand the customer's issue and frustration
+  2. **Empathizes** - Validate their experience without over-apologizing
+  3. **Resolves** - Provide clear solution steps or explain what you're doing
+  4. **Educates** - Help them avoid the issue in the future (if applicable)
+  5. **Closes** - End with a clear next step and invitation to reach out again
+
+  Response guidelines:
+  - Use the customer's name if provided
+  - Match the urgency level of the ticket
+  - Keep the response under 200 words
+  - Use simple, clear language
+  - Avoid technical jargon unless the customer used it
+  - Never blame the customer
+  - Be specific about timelines and next steps
+  - Use {response_style} tone
+
+  {%- if customer_tier == "enterprise" %}
+  Enterprise customer handling:
+  - Address with extra care and personalization
+  - Reference their account status positively
+  - Offer dedicated follow-up
+  {%- endif %}
+
+  Provide:
+  - **Response email** - The full response to send
+  - **Internal notes** - Notes for the support team (not visible to customer)
+  - **Follow-up action** - What to do if the customer responds or doesn't respond
+parameters:
+  - name: ticket
+    type: string
+    required: true
+    description: "The customer's support ticket or message"
+  - name: resolution
+    type: string
+    required: true
+    description: "The resolution information or steps to resolve the issue"
+  - name: company_name
+    type: string
+    required: false
+    description: "Your company name"
+    default: "our team"
+  - name: agent_name
+    type: string
+    required: false
+    description: "Support agent name for the signature"
+    default: "Support Team"
+  - name: response_style
+    type: string
+    required: false
+    description: "Response tone (empathetic, professional, friendly, concise)"
+    default: "empathetic"
+  - name: customer_tier
+    type: string
+    required: false
+    description: "Customer tier level (free, pro, enterprise)"
+    default: "pro"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 500
+  temperature: 0.5
+  tags: ["customer-service", "response", "support", "communication"]
+examples:
+  - input:
+      ticket: "I've been charged twice for my subscription this month. My bank shows two charges of $49.99 on Feb 10 and Feb 12. I need this resolved immediately and the duplicate charge refunded. Account: john@example.com"
+      resolution: "Confirmed duplicate charge in billing system. Refund has been initiated for the Feb 12 charge. Processing time: 3-5 business days. Root cause: payment gateway retry on timeout."
+      company_name: "DataFlow"
+      agent_name: "Alex"
+      response_style: "empathetic"
+      customer_tier: "pro"
+    expected_output_contains: ["refund", "3-5 business days", "apologize", "duplicate", "follow-up"]

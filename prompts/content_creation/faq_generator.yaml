@@ -1,0 +1,75 @@
+name: faq_generator
+version: "1.0"
+category: content_creation
+description: "Generate comprehensive FAQ sections from product or service information with clear, helpful answers"
+template: |
+  Generate a FAQ section based on the following information.
+
+  Subject: {subject}
+  Target audience: {audience}
+  Number of FAQs: {num_faqs}
+  Tone: {tone}
+
+  Source information:
+  {information}
+
+  Create {num_faqs} frequently asked questions organized by category:
+
+  For each FAQ:
+  - **Question** - Phrased naturally as a customer would ask it
+  - **Answer** - Clear, direct answer in 2-4 sentences
+    - Lead with the direct answer (no preamble)
+    - Include specific details and examples where helpful
+    - Link to related FAQs when topics overlap
+
+  Organize into logical categories such as:
+  - Getting Started / General
+  - Features / Functionality
+  - Pricing / Billing
+  - Technical / Troubleshooting
+  - Security / Privacy
+  - Account Management
+
+  Guidelines:
+  - Anticipate real customer pain points and confusion
+  - Address objections naturally within answers
+  - Use {tone} tone throughout
+  - Include both basic and advanced questions
+  - Make answers scannable with short paragraphs
+parameters:
+  - name: information
+    type: string
+    required: true
+    description: "Source material about the product, service, or topic"
+  - name: subject
+    type: string
+    required: true
+    description: "The product, service, or topic the FAQs cover"
+  - name: audience
+    type: string
+    required: false
+    description: "Target audience for the FAQs"
+    default: "customers"
+  - name: num_faqs
+    type: integer
+    required: false
+    description: "Number of FAQ entries to generate"
+    default: 10
+  - name: tone
+    type: string
+    required: false
+    description: "Answer tone (friendly, professional, technical, casual)"
+    default: "friendly"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1200
+  temperature: 0.6
+  tags: ["content-creation", "FAQ", "customer-support", "documentation"]
+examples:
+  - input:
+      information: "CloudSync is a file synchronization service. Free tier: 5GB storage. Pro tier: 100GB at $9.99/month. Business: unlimited at $19.99/user/month. Supports Windows, Mac, Linux, iOS, Android. End-to-end encryption. Automatic backup every 15 minutes. File versioning for 30 days. Shares via link with optional password protection. SOC 2 certified."
+      subject: "CloudSync file synchronization service"
+      audience: "potential and current customers"
+      num_faqs: 8
+      tone: "friendly"
+    expected_output_contains: ["question", "answer", "storage", "pricing", "security"]

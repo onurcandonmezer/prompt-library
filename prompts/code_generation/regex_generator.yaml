@@ -1,0 +1,86 @@
+name: regex_generator
+version: "1.0"
+category: code_generation
+description: "Generate and explain regular expressions for pattern matching with test cases and alternatives"
+template: |
+  Generate a regular expression for the following requirement.
+
+  Regex flavor: {flavor}
+  Strictness: {strictness}
+
+  Requirement:
+  {requirement}
+
+  Test cases (should match):
+  {should_match}
+
+  Test cases (should NOT match):
+  {should_not_match}
+
+  Provide:
+
+  ## Regular Expression
+  ```
+  [the regex pattern]
+  ```
+
+  ## Explanation
+  Break down each part of the regex:
+  - Component by component explanation
+  - What each group captures
+  - Why specific quantifiers or anchors were chosen
+
+  ## Test Results
+  | Input | Expected | Matches? | Captured Groups |
+  |-------|----------|----------|-----------------|
+
+  ## Variations
+  - **Strict version** - Maximum precision, may reject some valid edge cases
+  - **Lenient version** - Maximum recall, may accept some invalid edge cases
+  - **Simple version** - Easier to understand, covers 90% of cases
+
+  ## Usage Examples
+  Show the regex in context with code snippets for {flavor}.
+
+  ## Common Pitfalls
+  - Edge cases this regex handles
+  - Edge cases this regex does NOT handle
+  - Performance considerations for large inputs
+parameters:
+  - name: requirement
+    type: string
+    required: true
+    description: "Plain language description of what the regex should match"
+  - name: should_match
+    type: string
+    required: false
+    description: "Examples of strings that should match (one per line)"
+    default: "not provided"
+  - name: should_not_match
+    type: string
+    required: false
+    description: "Examples of strings that should NOT match (one per line)"
+    default: "not provided"
+  - name: flavor
+    type: string
+    required: false
+    description: "Regex flavor/engine (python, javascript, java, pcre, posix)"
+    default: "python"
+  - name: strictness
+    type: string
+    required: false
+    description: "How strict the regex should be (strict, moderate, lenient)"
+    default: "moderate"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 700
+  temperature: 0.2
+  tags: ["code-generation", "regex", "pattern-matching", "text-processing"]
+examples:
+  - input:
+      requirement: "Match email addresses with common TLDs (.com, .org, .net, .io, .dev). Allow subdomains and plus addressing."
+      should_match: "user@example.com\nuser+tag@sub.domain.org\njohn.doe@company.io"
+      should_not_match: "@example.com\nuser@\nuser@.com\nuser@com"
+      flavor: "python"
+      strictness: "moderate"
+    expected_output_contains: ["@", "\\.", "explanation", "test"]

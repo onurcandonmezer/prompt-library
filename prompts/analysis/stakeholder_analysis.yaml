@@ -1,0 +1,68 @@
+name: stakeholder_analysis
+version: "1.0"
+category: analysis
+description: "Analyze stakeholder interests, influence, and engagement strategies for projects or initiatives"
+template: |
+  Perform a stakeholder analysis for the following project or initiative.
+
+  Project: {project}
+  Phase: {phase}
+
+  Stakeholder information:
+  {stakeholder_info}
+
+  Provide your analysis:
+
+  ## Stakeholder Map
+  For each stakeholder:
+  | Stakeholder | Role | Interest Level | Influence Level | Stance | Category |
+  |------------|------|----------------|-----------------|--------|----------|
+
+  Interest: Low / Medium / High
+  Influence: Low / Medium / High
+  Stance: Champion / Supporter / Neutral / Skeptic / Blocker
+  Category: Key Player / Keep Satisfied / Keep Informed / Monitor
+
+  ## Power-Interest Matrix
+  - **High Power, High Interest** (Manage Closely) - Key players
+  - **High Power, Low Interest** (Keep Satisfied) - Influential but disengaged
+  - **Low Power, High Interest** (Keep Informed) - Interested but limited influence
+  - **Low Power, Low Interest** (Monitor) - Minimal attention needed
+
+  ## Engagement Strategy
+  For each key stakeholder:
+  - **Current relationship** - Where things stand
+  - **Desired relationship** - Where you need it to be
+  - **Key concerns** - What they care about most
+  - **Communication approach** - How and when to engage
+  - **Win strategy** - How to gain or maintain their support
+
+  ## Risk Assessment
+  - Stakeholders most likely to block progress
+  - Coalitions that could form (positive or negative)
+  - Recommended influence strategies
+parameters:
+  - name: stakeholder_info
+    type: string
+    required: true
+    description: "Information about stakeholders, their roles, interests, and relationships"
+  - name: project
+    type: string
+    required: true
+    description: "The project or initiative name and brief description"
+  - name: phase
+    type: string
+    required: false
+    description: "Current project phase (planning, execution, closing)"
+    default: "planning"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 900
+  temperature: 0.4
+  tags: ["analysis", "stakeholder", "project-management", "strategy"]
+examples:
+  - input:
+      stakeholder_info: "CEO - wants cost reduction, very busy. CTO - excited about new tech, strong advocate. CFO - concerned about budget overruns, skeptical. Engineering team - worried about learning curve, mixed feelings. Customers - unaware of changes, sensitive to downtime. VP Sales - needs features for Q4 deals, supportive if timeline holds."
+      project: "Platform modernization from monolith to microservices"
+      phase: "planning"
+    expected_output_contains: ["stakeholder", "interest", "influence", "engagement", "strategy"]

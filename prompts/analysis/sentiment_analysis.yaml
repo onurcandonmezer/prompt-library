@@ -1,0 +1,51 @@
+name: sentiment_analysis
+version: "1.0"
+category: analysis
+description: "Analyze the sentiment of text, identifying emotional tone, intensity, and specific sentiment drivers"
+template: |
+  Perform a detailed sentiment analysis on the following text.
+
+  Context: {context}
+  Granularity: {granularity}
+
+  Text:
+  {text}
+
+  Provide your analysis in this structure:
+  1. **Overall Sentiment** - Positive / Negative / Neutral / Mixed (with confidence score 0-100%)
+  2. **Sentiment Score** - Numeric score from -1.0 (very negative) to +1.0 (very positive)
+  3. **Emotional Tones** - Specific emotions detected (e.g., joy, frustration, anxiety, confidence)
+  4. **Sentiment Drivers** - Specific phrases or topics driving the sentiment
+  5. **Intensity** - Low / Medium / High emotional intensity
+  {%- if granularity == "sentence" %}
+  6. **Sentence-Level Breakdown** - Sentiment for each sentence individually
+  {%- endif %}
+  7. **Context Considerations** - Any sarcasm, irony, or cultural nuances detected
+
+  Be precise and evidence-based. Quote specific text segments that support your analysis.
+parameters:
+  - name: text
+    type: string
+    required: true
+    description: "The text to analyze for sentiment"
+  - name: context
+    type: string
+    required: false
+    description: "Context for the text (product review, social media post, email, survey response)"
+    default: "general"
+  - name: granularity
+    type: string
+    required: false
+    description: "Level of analysis detail (overall, paragraph, sentence)"
+    default: "overall"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 500
+  temperature: 0.2
+  tags: ["analysis", "sentiment", "NLP", "opinion-mining"]
+examples:
+  - input:
+      text: "The product itself is fantastic - great build quality and the features work exactly as advertised. However, the customer support experience was absolutely terrible. I waited 3 hours on hold only to be transferred twice. Very disappointed with the service side of things, but I do love the actual product."
+      context: "product review"
+      granularity: "sentence"
+    expected_output_contains: ["mixed", "positive", "negative", "support", "product quality"]

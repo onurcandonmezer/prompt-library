@@ -1,0 +1,76 @@
+name: product_description
+version: "1.0"
+category: content_creation
+description: "Write compelling product descriptions that highlight benefits, features, and drive purchase decisions"
+template: |
+  Write a product description for the following product.
+
+  Product: {product_name}
+  Category: {category}
+  Target customer: {target_customer}
+  Tone: {tone}
+  Length: {length}
+
+  Product details:
+  {product_details}
+
+  Structure the description:
+  1. **Headline** - Attention-grabbing title that communicates core value
+  2. **Tagline** - One-sentence value proposition
+  3. **Opening** - Lead with the primary benefit, not features
+  4. **Key Benefits** - 3-5 benefit-driven bullet points
+     - Lead each with the benefit, then explain the feature
+     - Use sensory and emotional language where appropriate
+  5. **Features** - Technical specifications or details
+  6. **Social Proof Hook** - Placeholder for testimonials or stats
+  7. **Call to Action** - Compelling reason to buy now
+
+  Writing guidelines:
+  - Focus on benefits over features (what it does FOR the customer)
+  - Use power words that trigger emotion
+  - Address potential objections implicitly
+  - Create urgency without being pushy
+  - Write in {tone} tone for {target_customer}
+parameters:
+  - name: product_details
+    type: string
+    required: true
+    description: "Raw product information including features, specs, and unique selling points"
+  - name: product_name
+    type: string
+    required: true
+    description: "Name of the product"
+  - name: category
+    type: string
+    required: false
+    description: "Product category (SaaS, physical product, service, digital product)"
+    default: "not specified"
+  - name: target_customer
+    type: string
+    required: false
+    description: "Target customer profile"
+    default: "general consumer"
+  - name: tone
+    type: string
+    required: false
+    description: "Writing tone (premium, casual, technical, playful, minimalist)"
+    default: "professional"
+  - name: length
+    type: string
+    required: false
+    description: "Description length (short: 50-100 words, medium: 100-200, long: 200-400)"
+    default: "medium"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 500
+  temperature: 0.7
+  tags: ["content-creation", "product", "copywriting", "e-commerce"]
+examples:
+  - input:
+      product_details: "Wireless noise-cancelling headphones. 40-hour battery life. Bluetooth 5.3. Active noise cancellation with transparency mode. Premium memory foam ear cushions. Weighs 250g. Foldable design. Built-in microphone for calls. Compatible with all devices. Available in black, white, and midnight blue."
+      product_name: "SonicPro X1 Headphones"
+      category: "consumer electronics"
+      target_customer: "remote workers and commuters aged 25-45"
+      tone: "premium"
+      length: "medium"
+    expected_output_contains: ["benefit", "noise", "battery", "comfort", "call to action"]

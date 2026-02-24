@@ -1,0 +1,76 @@
+name: unit_test
+version: "1.0"
+category: code_generation
+description: "Generate comprehensive unit tests with edge cases, mocking, and clear test organization"
+template: |
+  Generate unit tests for the following code.
+
+  Testing framework: {framework}
+  Coverage target: {coverage_target}
+
+  Code to test:
+  ```{language}
+  {code}
+  ```
+
+  Additional context:
+  {context}
+
+  Generate tests following these principles:
+  - **Arrange-Act-Assert** pattern for each test
+  - Descriptive test names that explain the scenario and expected outcome
+  - Group tests logically by method or behavior
+  - Include these test categories:
+    1. **Happy path** - Normal expected inputs and behavior
+    2. **Edge cases** - Boundary values, empty inputs, single items
+    3. **Error cases** - Invalid inputs, exceptions, error handling
+    4. **Integration points** - Mock external dependencies
+  {%- if framework == "pytest" %}
+  - Use pytest fixtures for setup/teardown
+  - Use parametrize for testing multiple inputs
+  - Use pytest.raises for exception testing
+  {%- endif %}
+  {%- if framework == "jest" %}
+  - Use describe/it blocks for organization
+  - Use beforeEach/afterEach for setup
+  - Use expect().toThrow() for error testing
+  {%- endif %}
+
+  Aim for {coverage_target}% code coverage. Include comments explaining non-obvious test choices.
+parameters:
+  - name: code
+    type: string
+    required: true
+    description: "The source code to generate tests for"
+  - name: language
+    type: string
+    required: true
+    description: "Programming language of the source code"
+  - name: framework
+    type: string
+    required: false
+    description: "Testing framework to use (pytest, unittest, jest, mocha, junit)"
+    default: "pytest"
+  - name: coverage_target
+    type: integer
+    required: false
+    description: "Target code coverage percentage"
+    default: 90
+  - name: context
+    type: string
+    required: false
+    description: "Additional context about dependencies, environment, or constraints"
+    default: "none"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1200
+  temperature: 0.3
+  tags: ["code-generation", "testing", "unit-tests", "quality"]
+examples:
+  - input:
+      code: "def divide(a: float, b: float) -> float:\n    if b == 0:\n        raise ValueError('Cannot divide by zero')\n    return round(a / b, 10)"
+      language: "python"
+      framework: "pytest"
+      coverage_target: 100
+      context: "This function is used in a financial calculation module"
+    expected_output_contains: ["test_", "assert", "pytest.raises", "ValueError", "divide"]

@@ -1,0 +1,81 @@
+name: presentation_outline
+version: "1.0"
+category: content_creation
+description: "Create structured presentation outlines with speaker notes, slide content suggestions, and timing"
+template: |
+  Create a presentation outline for the following topic.
+
+  Topic: {topic}
+  Audience: {audience}
+  Duration: {duration} minutes
+  Presentation style: {style}
+  Key message: {key_message}
+
+  Context:
+  {context}
+
+  Create a slide-by-slide outline:
+
+  For each slide, provide:
+  - **Slide number and title**
+  - **Key points** - 3-4 bullet points for the slide
+  - **Visual suggestion** - What graphic, chart, or image to include
+  - **Speaker notes** - What to say (2-3 sentences)
+  - **Time allocation** - Minutes for this slide
+
+  Follow this structure:
+  1. **Title Slide** - Topic, presenter, date
+  2. **Hook / Opening** - Grab attention with a question, stat, or story
+  3. **Agenda** - What you'll cover
+  4. **Context / Problem** - Why this matters
+  5. **Main Content** - 3-5 key sections
+  6. **Data / Evidence** - Supporting information
+  7. **Recommendations / Solution** - Your proposal
+  8. **Next Steps** - Clear action items
+  9. **Q&A** - Open discussion
+  10. **Closing / Thank You** - Final message and contact info
+
+  Total slides should be approximately 1 slide per {duration_per_slide} minutes.
+  Aim for {slide_count} slides total.
+parameters:
+  - name: topic
+    type: string
+    required: true
+    description: "Presentation topic"
+  - name: context
+    type: string
+    required: true
+    description: "Background information and key data for the presentation"
+  - name: audience
+    type: string
+    required: true
+    description: "Who will attend the presentation"
+  - name: duration
+    type: integer
+    required: false
+    description: "Presentation duration in minutes"
+    default: 30
+  - name: style
+    type: string
+    required: false
+    description: "Presentation style (informative, persuasive, workshop, pitch, update)"
+    default: "informative"
+  - name: key_message
+    type: string
+    required: false
+    description: "The single most important message to convey"
+    default: "derived from topic"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1200
+  temperature: 0.6
+  tags: ["content-creation", "presentation", "slides", "public-speaking"]
+examples:
+  - input:
+      topic: "Adopting AI in Our Customer Service Operations"
+      context: "Current metrics: 5-minute average wait time, 72% first-contact resolution, 85% CSAT score. Proposing an AI chatbot that could handle 40% of tickets automatically. Budget request: $150K. Implementation: 3 months."
+      audience: "VP of Operations and Customer Service leadership team"
+      duration: 20
+      style: "persuasive"
+      key_message: "AI-powered support can reduce wait times by 60% while improving CSAT scores"
+    expected_output_contains: ["slide", "speaker notes", "visual", "AI", "metrics", "Q&A"]

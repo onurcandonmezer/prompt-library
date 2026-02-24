@@ -1,0 +1,69 @@
+name: trend_analysis
+version: "1.0"
+category: analysis
+description: "Identify and analyze trends from data descriptions, market reports, or historical information"
+template: |
+  Analyze the following information to identify and interpret trends.
+
+  Domain: {domain}
+  Time period: {time_period}
+  Focus: {focus}
+
+  Data/Information:
+  {data}
+
+  Provide your trend analysis:
+
+  ## Identified Trends
+  For each trend found:
+  - **Trend Name** - Descriptive label
+  - **Direction** - Upward / Downward / Cyclical / Emerging / Declining
+  - **Strength** - Strong / Moderate / Weak
+  - **Evidence** - Supporting data points from the provided information
+  - **Confidence** - How confident you are in this trend (High/Medium/Low)
+
+  ## Trend Interconnections
+  - How do identified trends relate to each other?
+  - Are any trends driving or reinforcing others?
+
+  ## Projections
+  - Where are these trends likely heading in the {time_period}?
+  - What inflection points should be monitored?
+
+  ## Strategic Implications
+  - What should decision-makers pay attention to?
+  - Recommended actions based on trend directions
+
+  Note: Clearly distinguish between observed trends and speculative projections.
+parameters:
+  - name: data
+    type: string
+    required: true
+    description: "Data descriptions, statistics, market reports, or historical information to analyze"
+  - name: domain
+    type: string
+    required: false
+    description: "Domain or industry context (technology, finance, healthcare, etc.)"
+    default: "general"
+  - name: time_period
+    type: string
+    required: false
+    description: "Time period the data covers or projection horizon"
+    default: "not specified"
+  - name: focus
+    type: string
+    required: false
+    description: "Specific aspect to focus trend analysis on"
+    default: "all notable trends"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 800
+  temperature: 0.5
+  tags: ["analysis", "trends", "forecasting", "market-research"]
+examples:
+  - input:
+      data: "2022: Remote work at 35%, AI tool adoption at 15%, office leases down 20%. 2023: Remote work at 40%, AI tool adoption at 35%, office leases down 30%. 2024: Remote work plateaued at 38%, AI tool adoption at 60%, office leases stabilized at -28%. 2025: Remote work at 36%, AI tool adoption at 78%, office leases recovering at -15%."
+      domain: "workplace technology"
+      time_period: "2022-2025 with 2026 outlook"
+      focus: "workplace transformation"
+    expected_output_contains: ["trend", "AI adoption", "remote work", "projection"]

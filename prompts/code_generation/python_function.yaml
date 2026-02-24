@@ -1,0 +1,68 @@
+name: python_function
+version: "1.0"
+category: code_generation
+description: "Generate well-structured Python functions with type hints, docstrings, error handling, and tests"
+template: |
+  Generate a Python function based on the following specification.
+
+  Function name: {function_name}
+  Purpose: {purpose}
+  Python version: {python_version}
+  Style: {style}
+
+  Requirements:
+  {requirements}
+
+  Follow these guidelines:
+  - Include comprehensive type hints for all parameters and return values
+  - Write a Google-style docstring with Args, Returns, and Raises sections
+  - Implement proper error handling with specific exception types
+  - Add input validation where appropriate
+  - Follow PEP 8 conventions
+  - Keep the function focused on a single responsibility
+  - Include relevant imports at the top
+  {%- if style == "defensive" %}
+  - Add extensive input validation and edge case handling
+  {%- endif %}
+  {%- if style == "performant" %}
+  - Optimize for performance with appropriate data structures and algorithms
+  {%- endif %}
+
+  Provide the complete function code, followed by 2-3 usage examples.
+parameters:
+  - name: purpose
+    type: string
+    required: true
+    description: "What the function should do"
+  - name: requirements
+    type: string
+    required: true
+    description: "Detailed functional requirements, input/output specs, and constraints"
+  - name: function_name
+    type: string
+    required: false
+    description: "Desired function name (snake_case)"
+    default: "auto-generate based on purpose"
+  - name: python_version
+    type: string
+    required: false
+    description: "Target Python version"
+    default: "3.11+"
+  - name: style
+    type: string
+    required: false
+    description: "Coding style priority (clean, defensive, performant, minimal)"
+    default: "clean"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 800
+  temperature: 0.3
+  tags: ["code-generation", "python", "functions", "development"]
+examples:
+  - input:
+      purpose: "Calculate the weighted average of a list of scores"
+      requirements: "Accept a list of (score, weight) tuples. Scores are 0-100, weights are positive floats. Return the weighted average rounded to 2 decimal places. Handle empty lists and invalid inputs gracefully."
+      function_name: "calculate_weighted_average"
+      python_version: "3.11+"
+      style: "defensive"
+    expected_output_contains: ["def calculate_weighted_average", "float", "raise", "docstring"]

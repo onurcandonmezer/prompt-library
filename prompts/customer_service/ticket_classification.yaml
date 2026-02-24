@@ -1,0 +1,72 @@
+name: ticket_classification
+version: "1.0"
+category: customer_service
+description: "Classify support tickets by category, priority, sentiment, and route to the appropriate team"
+template: |
+  Classify the following customer support ticket.
+
+  Product/Service: {product}
+  Available categories: {categories}
+  SLA tiers: {sla_tiers}
+
+  Ticket:
+  {ticket}
+
+  Provide the following classification:
+
+  ## Primary Classification
+  - **Category** - Main issue category from: {categories}
+  - **Sub-category** - More specific classification
+  - **Priority** - P1 (Critical) / P2 (High) / P3 (Medium) / P4 (Low)
+  - **Severity** - How severely the customer is impacted
+  - **Sentiment** - Positive / Neutral / Negative / Angry / Frustrated
+
+  ## Routing
+  - **Assigned team** - Which team should handle this (Tier 1, Tier 2, Engineering, Billing, etc.)
+  - **Escalation needed** - Yes / No (with reason)
+  - **Estimated resolution time** - Based on complexity and priority
+
+  ## Issue Analysis
+  - **Problem summary** - One-sentence description of the issue
+  - **Customer impact** - How this affects the customer's operations
+  - **Root issue** - The likely underlying problem
+  - **Related issues** - Potential related or duplicate tickets to check
+
+  ## Suggested Response Approach
+  - Recommended first response tone and approach
+  - Key information to request from the customer
+  - Potential quick resolution if applicable
+
+  ## Tags
+  List relevant tags for searchability and reporting.
+parameters:
+  - name: ticket
+    type: string
+    required: true
+    description: "The support ticket content including subject and body"
+  - name: product
+    type: string
+    required: false
+    description: "The product or service the ticket relates to"
+    default: "not specified"
+  - name: categories
+    type: string
+    required: false
+    description: "Available classification categories"
+    default: "Bug, Feature Request, Account Issue, Billing, How-To, Integration, Performance, Security, Other"
+  - name: sla_tiers
+    type: string
+    required: false
+    description: "SLA tier definitions for priority assignment"
+    default: "P1: 1hr response, P2: 4hr, P3: 8hr, P4: 24hr"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 600
+  temperature: 0.2
+  tags: ["customer-service", "classification", "support", "routing"]
+examples:
+  - input:
+      ticket: "Subject: URGENT - Cannot access my account!!\n\nI've been trying to log in for the past 2 hours and keep getting an 'Invalid credentials' error. I KNOW my password is correct because I just changed it yesterday. I have a critical presentation in 30 minutes and all my files are in your system. This is completely unacceptable. Fix this NOW or I'm cancelling my subscription. Order ID: #78234, Enterprise plan."
+      product: "CloudDocs collaboration platform"
+      categories: "Bug, Account Issue, Billing, How-To, Integration, Performance, Security"
+    expected_output_contains: ["Account Issue", "P1", "critical", "escalation", "negative", "authentication"]

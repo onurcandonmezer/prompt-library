@@ -1,0 +1,76 @@
+name: email_template
+version: "1.0"
+category: content_creation
+description: "Create professional email templates for various business scenarios with customizable tone and structure"
+template: |
+  Create an email template for the following scenario.
+
+  Email type: {email_type}
+  Sender role: {sender_role}
+  Recipient: {recipient}
+  Tone: {tone}
+  Goal: {goal}
+
+  Context:
+  {context}
+
+  Provide the email with:
+  1. **Subject line** - Clear, compelling, under 50 characters
+     - Also provide 2 alternative subject lines
+  2. **Email body:**
+     - **Opening** - Appropriate greeting and context-setting
+     - **Main message** - Clear, concise body with the core information
+     - **Call to action** - Specific next step you want the recipient to take
+     - **Closing** - Professional sign-off appropriate to the relationship
+  3. **Personalization notes** - Where and how to customize for each recipient
+
+  Email best practices:
+  - Keep paragraphs short (2-3 sentences)
+  - Front-load the most important information
+  - Use one clear call-to-action
+  - Match formality to the relationship
+  - Avoid jargon unless recipient is familiar
+  - Total length: under 200 words for best response rates
+parameters:
+  - name: context
+    type: string
+    required: true
+    description: "The specific situation or context for the email"
+  - name: email_type
+    type: string
+    required: true
+    description: "Type of email (introduction, follow-up, proposal, announcement, thank-you, apology, request)"
+  - name: sender_role
+    type: string
+    required: false
+    description: "Role of the person sending the email"
+    default: "not specified"
+  - name: recipient
+    type: string
+    required: false
+    description: "Who the email is addressed to (role, relationship)"
+    default: "business contact"
+  - name: tone
+    type: string
+    required: false
+    description: "Email tone (formal, professional, friendly, casual)"
+    default: "professional"
+  - name: goal
+    type: string
+    required: false
+    description: "Primary goal of the email"
+    default: "inform and get a response"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 500
+  temperature: 0.6
+  tags: ["content-creation", "email", "communication", "business"]
+examples:
+  - input:
+      context: "Following up with a prospect who attended our webinar last week about data analytics. They asked a question about pricing during Q&A. Want to schedule a demo."
+      email_type: "follow-up"
+      sender_role: "Account Executive"
+      recipient: "Webinar attendee / potential customer"
+      tone: "friendly"
+      goal: "Schedule a product demo"
+    expected_output_contains: ["subject", "webinar", "demo", "schedule", "call to action"]

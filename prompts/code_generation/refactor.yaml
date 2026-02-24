@@ -1,0 +1,75 @@
+name: refactor
+version: "1.0"
+category: code_generation
+description: "Suggest and implement code refactoring to improve readability, maintainability, and performance"
+template: |
+  Analyze the following code and suggest refactoring improvements.
+
+  Refactoring goals: {goals}
+  Constraints: {constraints}
+
+  Code:
+  ```{language}
+  {code}
+  ```
+
+  Provide your refactoring analysis:
+
+  ## Code Smells Identified
+  List specific issues found:
+  - Smell type (e.g., long method, duplicate code, god class)
+  - Location in the code
+  - Why it's problematic
+  - Severity: Low / Medium / High
+
+  ## Refactoring Recommendations
+  For each recommendation:
+  1. **What to change** - Specific refactoring technique (extract method, rename, simplify conditional, etc.)
+  2. **Why** - The benefit of this change
+  3. **Before** - The current code snippet
+  4. **After** - The refactored code snippet
+  5. **Risk** - Potential risks or breaking changes
+
+  ## Refactored Code
+  Provide the complete refactored version with:
+  - All recommended changes applied
+  - Comments marking what changed and why
+  - Preserved functionality (same inputs produce same outputs)
+
+  ## Summary
+  - Number of changes made
+  - Estimated improvement in readability/maintainability
+  - Any trade-offs made
+
+  Prioritize changes by {goals}. Respect these constraints: {constraints}.
+parameters:
+  - name: code
+    type: string
+    required: true
+    description: "The code to refactor"
+  - name: language
+    type: string
+    required: true
+    description: "Programming language of the code"
+  - name: goals
+    type: string
+    required: false
+    description: "Refactoring priorities (readability, performance, maintainability, testability, all)"
+    default: "readability and maintainability"
+  - name: constraints
+    type: string
+    required: false
+    description: "Constraints on refactoring (preserve API, no new dependencies, backward compatible)"
+    default: "preserve public API"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1200
+  temperature: 0.3
+  tags: ["code-generation", "refactoring", "code-quality", "best-practices"]
+examples:
+  - input:
+      code: "def process(data):\n    result = []\n    for item in data:\n        if item['type'] == 'A':\n            if item['value'] > 100:\n                if item['status'] == 'active':\n                    result.append({'name': item['name'], 'value': item['value'] * 1.1})\n        elif item['type'] == 'B':\n            if item['value'] > 200:\n                if item['status'] == 'active':\n                    result.append({'name': item['name'], 'value': item['value'] * 1.2})\n    return result"
+      language: "python"
+      goals: "readability and maintainability"
+      constraints: "preserve public API"
+    expected_output_contains: ["code smell", "nested", "extract", "refactored"]

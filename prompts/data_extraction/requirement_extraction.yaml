@@ -1,0 +1,68 @@
+name: requirement_extraction
+version: "1.0"
+category: data_extraction
+description: "Extract functional and non-functional requirements from documents, emails, or meeting notes"
+template: |
+  Extract all requirements from the following document.
+
+  Project context: {project_context}
+  Requirement types: {requirement_types}
+  Output format: {output_format}
+
+  Document:
+  {document}
+
+  For each requirement extracted, provide:
+  - **ID** - Sequential identifier (REQ-001, REQ-002, etc.)
+  - **Description** - Clear, testable requirement statement
+  - **Type** - Functional / Non-Functional / Constraint / Assumption
+  - **Priority** - Must Have / Should Have / Could Have / Won't Have (MoSCoW)
+  - **Source** - Quote from the original text where this requirement was found
+  - **Acceptance Criteria** - How to verify the requirement is met
+  - **Dependencies** - Other requirements this depends on
+  - **Ambiguity Flag** - Flag requirements that are vague or need clarification
+
+  Guidelines:
+  - Rewrite vague statements as specific, measurable requirements
+  - Distinguish between stated requirements and implied requirements
+  - Identify conflicting requirements and flag them
+  - Separate business requirements from technical requirements
+  - Use "shall" for mandatory requirements, "should" for desirable ones
+  - Each requirement should be atomic (one requirement per entry)
+
+  After extraction, provide:
+  - **Summary** - Total requirements by type and priority
+  - **Gaps** - Areas where requirements seem incomplete
+  - **Clarification Needed** - Questions to ask stakeholders
+parameters:
+  - name: document
+    type: string
+    required: true
+    description: "The document to extract requirements from"
+  - name: project_context
+    type: string
+    required: false
+    description: "Brief context about the project"
+    default: "not specified"
+  - name: requirement_types
+    type: string
+    required: false
+    description: "Types to extract (all, functional, non-functional, constraints)"
+    default: "all"
+  - name: output_format
+    type: string
+    required: false
+    description: "Output format (table, json, list)"
+    default: "table"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1000
+  temperature: 0.2
+  tags: ["data-extraction", "requirements", "project-management", "analysis"]
+examples:
+  - input:
+      document: "The new portal must allow users to reset their passwords without contacting support. Pages should load in under 2 seconds. We need to support at least 10,000 concurrent users. The system must comply with GDPR. It would be nice to have dark mode. All data must be encrypted at rest and in transit. Users should be able to export their data as CSV. The mobile experience is critical - must work on iOS and Android."
+      project_context: "Customer self-service portal redesign"
+      requirement_types: "all"
+      output_format: "table"
+    expected_output_contains: ["REQ-", "functional", "non-functional", "password", "GDPR", "priority"]

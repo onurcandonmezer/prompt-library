@@ -1,0 +1,46 @@
+name: tldr
+version: "1.0"
+category: summarization
+description: "Generate ultra-short TLDR summaries capturing the absolute essence of a text in 1-3 sentences"
+template: |
+  Provide a TLDR (Too Long; Didn't Read) summary of the following text.
+
+  Tone: {tone}
+  Max sentences: {max_sentences}
+
+  Text:
+  {text}
+
+  Rules:
+  - Capture the single most important takeaway
+  - Use plain, direct language
+  - No hedging or qualifications unless critical
+  - Stay within {max_sentences} sentence(s)
+  - If the text has a clear conclusion or call to action, include it
+  - Format: "TLDR: [your summary]"
+parameters:
+  - name: text
+    type: string
+    required: true
+    description: "The text to create a TLDR for"
+  - name: tone
+    type: string
+    required: false
+    description: "Tone of the TLDR (professional, casual, academic)"
+    default: "professional"
+  - name: max_sentences
+    type: integer
+    required: false
+    description: "Maximum number of sentences (1-3)"
+    default: 2
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 100
+  temperature: 0.4
+  tags: ["summarization", "tldr", "brief", "quick-read"]
+examples:
+  - input:
+      text: "After extensive testing over six months involving 500 participants across three countries, our research team concluded that the new drug candidate XR-47 shows a statistically significant improvement in patient outcomes for Type 2 diabetes management, reducing HbA1c levels by an average of 1.8 percentage points compared to the current standard of care, with minimal side effects reported in only 3% of participants."
+      tone: "professional"
+      max_sentences: 1
+    expected_output_contains: ["TLDR", "drug", "diabetes"]

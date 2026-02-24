@@ -1,0 +1,86 @@
+name: feedback_categorizer
+version: "1.0"
+category: customer_service
+description: "Categorize and analyze customer feedback into themes, priorities, and actionable product insights"
+template: |
+  Categorize and analyze the following customer feedback.
+
+  Product: {product}
+  Feedback period: {period}
+  Categorization scheme: {scheme}
+
+  Feedback entries:
+  {feedback}
+
+  Provide your analysis:
+
+  ## Category Distribution
+  | Category | Count | Percentage | Avg Sentiment |
+  |----------|-------|------------|---------------|
+
+  Common categories:
+  - Feature Request
+  - Bug Report
+  - UX/Usability
+  - Performance
+  - Pricing/Value
+  - Documentation
+  - Onboarding
+  - Integration
+  - Praise/Positive
+  - Other
+
+  ## Detailed Categorization
+  For each feedback entry:
+  - **ID** - Sequential identifier
+  - **Category** - Primary category
+  - **Sub-category** - More specific classification
+  - **Sentiment** - Positive / Neutral / Negative
+  - **Priority** - Based on frequency, impact, and feasibility
+  - **Key quote** - Most representative phrase from the feedback
+  - **Actionable?** - Yes / No
+
+  ## Theme Analysis
+  Group feedback into overarching themes:
+  - **Theme name** - Descriptive label
+  - **Frequency** - How often this theme appears
+  - **Representative feedback** - Example entries
+  - **Recommended action** - What to do about this theme
+
+  ## Insights Summary
+  - **Top 3 requests** - Most frequently mentioned improvements
+  - **Top pain points** - Most critical issues affecting users
+  - **Positive highlights** - What users love (for marketing/retention)
+  - **Product roadmap input** - Suggestions for product team prioritization
+parameters:
+  - name: feedback
+    type: string
+    required: true
+    description: "Customer feedback entries (one per line or separated by markers)"
+  - name: product
+    type: string
+    required: false
+    description: "Product or service name"
+    default: "not specified"
+  - name: period
+    type: string
+    required: false
+    description: "Time period the feedback covers"
+    default: "not specified"
+  - name: scheme
+    type: string
+    required: false
+    description: "Categorization scheme (standard, custom, product-specific)"
+    default: "standard"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 900
+  temperature: 0.3
+  tags: ["customer-service", "feedback", "categorization", "product-management"]
+examples:
+  - input:
+      feedback: "1. Love the new dashboard, much easier to find things!\n2. Export to PDF is broken again, this is the third time.\n3. Can you add Slack notifications for alerts?\n4. Way too expensive for a small team of 3 people.\n5. The mobile app crashes every time I try to upload photos.\n6. Great customer support, Sarah was super helpful!\n7. Need better documentation for the API, spent hours figuring out authentication.\n8. Would be amazing to have dark mode."
+      product: "ProjectHub project management tool"
+      period: "February 2025"
+      scheme: "standard"
+    expected_output_contains: ["category", "bug", "feature request", "sentiment", "priority", "theme"]

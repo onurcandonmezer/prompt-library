@@ -1,0 +1,86 @@
+name: metric_extraction
+version: "1.0"
+category: data_extraction
+description: "Extract numeric metrics, KPIs, statistics, and quantitative data from text with context and units"
+template: |
+  Extract all numeric metrics and quantitative data from the following text.
+
+  Domain: {domain}
+  Output format: {output_format}
+  Include calculations: {include_calculations}
+
+  Text:
+  {text}
+
+  For each metric found, extract:
+  - **Metric name** - Descriptive label for the metric
+  - **Value** - The numeric value
+  - **Unit** - Unit of measurement (%, $, users, seconds, etc.)
+  - **Type** - Absolute / Percentage / Ratio / Growth Rate / Comparison
+  - **Time period** - When this metric applies (if mentioned)
+  - **Context** - What this metric measures and why it matters
+  - **Trend** - Increase / Decrease / Stable / Not specified
+  - **Benchmark** - Comparison value if mentioned (vs. previous period, competitors, targets)
+
+  {%- if include_calculations == true %}
+  ## Derived Metrics
+  Calculate additional insights from the extracted data:
+  - Growth rates between periods
+  - Ratios and percentages
+  - Averages and totals
+  - Year-over-year or period-over-period changes
+  {%- endif %}
+
+  {%- if output_format == "json" %}
+  ```json
+  [
+    {{
+      "metric": "name",
+      "value": 0,
+      "unit": "unit",
+      "type": "absolute",
+      "period": "Q3 2025",
+      "context": "description",
+      "trend": "increase",
+      "benchmark": null
+    }}
+  ]
+  ```
+  {%- endif %}
+
+  ## Summary Dashboard
+  - Total metrics extracted
+  - Key highlights (top 3 most significant metrics)
+  - Data quality notes (any ambiguous or potentially inaccurate numbers)
+parameters:
+  - name: text
+    type: string
+    required: true
+    description: "The text to extract metrics from"
+  - name: domain
+    type: string
+    required: false
+    description: "Domain context (finance, marketing, engineering, sales, healthcare)"
+    default: "general"
+  - name: output_format
+    type: string
+    required: false
+    description: "Output format (json, table, dashboard)"
+    default: "table"
+  - name: include_calculations
+    type: boolean
+    required: false
+    description: "Whether to calculate derived metrics from extracted data"
+    default: true
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 700
+  temperature: 0.1
+  tags: ["data-extraction", "metrics", "KPIs", "analytics"]
+examples:
+  - input:
+      text: "Our SaaS platform ended Q3 with 12,500 active users, up from 10,000 in Q2. Monthly recurring revenue hit $450K, a 20% increase quarter-over-quarter. Customer churn dropped to 2.1% from 3.5%. Average revenue per user is $36. Customer acquisition cost decreased from $150 to $120. NPS score improved to 72. The sales team closed 45 deals with an average deal size of $15K. Website traffic was 500K unique visitors with a 3.2% conversion rate."
+      domain: "SaaS metrics"
+      output_format: "table"
+      include_calculations: true
+    expected_output_contains: ["12,500", "revenue", "churn", "ARPU", "growth", "conversion"]

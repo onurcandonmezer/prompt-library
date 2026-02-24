@@ -1,0 +1,86 @@
+name: newsletter
+version: "1.0"
+category: content_creation
+description: "Draft engaging newsletter content with curated sections, personalization hooks, and clear CTAs"
+template: |
+  Draft a newsletter edition based on the following information.
+
+  Newsletter name: {newsletter_name}
+  Edition theme: {theme}
+  Audience: {audience}
+  Tone: {tone}
+  Frequency: {frequency}
+
+  Content to include:
+  {content}
+
+  Structure the newsletter:
+
+  1. **Subject line** - Compelling subject under 50 characters
+     - Preview text (40-90 characters shown after subject)
+     - 2 alternative subject lines for A/B testing
+
+  2. **Personal greeting** - Brief, warm opening with personalization placeholder
+
+  3. **Featured story** - Main content piece (150-200 words)
+     - Eye-catching headline
+     - Key insight or value
+     - CTA button text
+
+  4. **Quick hits** - 3-4 short news items or tips (30-50 words each)
+     - Each with a headline and one-line summary
+     - Link placeholder for each
+
+  5. **Resource spotlight** - One tool, article, or resource recommendation
+     - Why it's valuable for the audience
+
+  6. **Community highlight** - User story, testimonial, or community news
+
+  7. **What's coming** - Teaser for next edition or upcoming events
+
+  8. **Footer** - Unsubscribe, social links, company info placeholders
+
+  Keep total reading time under 5 minutes. Use short paragraphs and scannable formatting.
+parameters:
+  - name: content
+    type: string
+    required: true
+    description: "Raw content, news items, and updates to include in the newsletter"
+  - name: newsletter_name
+    type: string
+    required: true
+    description: "Name of the newsletter"
+  - name: theme
+    type: string
+    required: false
+    description: "Theme or focus of this edition"
+    default: "general update"
+  - name: audience
+    type: string
+    required: false
+    description: "Newsletter subscriber audience"
+    default: "subscribers"
+  - name: tone
+    type: string
+    required: false
+    description: "Newsletter tone (professional, casual, educational, inspirational)"
+    default: "professional"
+  - name: frequency
+    type: string
+    required: false
+    description: "Newsletter frequency (daily, weekly, bi-weekly, monthly)"
+    default: "weekly"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1000
+  temperature: 0.7
+  tags: ["content-creation", "newsletter", "email-marketing", "engagement"]
+examples:
+  - input:
+      content: "New feature: real-time collaboration launched. Blog post about remote work trends got 10K views. Upcoming webinar on AI productivity on March 15. Customer case study: Acme Corp reduced onboarding time by 50%. Industry report: SaaS market growing 20% YoY. Product tip: keyboard shortcuts that save 30 minutes/day."
+      newsletter_name: "The Productivity Pulse"
+      theme: "collaboration and teamwork"
+      audience: "SaaS product users and productivity enthusiasts"
+      tone: "casual"
+      frequency: "weekly"
+    expected_output_contains: ["subject", "featured", "quick hits", "CTA", "collaboration"]

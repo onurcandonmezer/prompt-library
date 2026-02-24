@@ -1,0 +1,67 @@
+name: risk_analysis
+version: "1.0"
+category: analysis
+description: "Analyze and assess risks in proposals, projects, or business decisions with probability and impact ratings"
+template: |
+  Perform a risk analysis on the following proposal or plan.
+
+  Subject: {subject}
+  Risk appetite: {risk_appetite}
+  Scope: {scope}
+
+  Proposal/Plan details:
+  {proposal}
+
+  Structure your risk analysis as:
+
+  ## Risk Register
+  For each identified risk, provide:
+  | Risk | Category | Probability | Impact | Risk Score | Priority |
+  |------|----------|-------------|--------|------------|----------|
+
+  Use: Probability (1-5), Impact (1-5), Risk Score = P x I
+
+  ## Detailed Risk Assessment
+  For each high and critical risk:
+  - **Description** - What could go wrong
+  - **Trigger Conditions** - What would cause this risk to materialize
+  - **Consequences** - What happens if it occurs
+  - **Mitigation Strategy** - How to reduce probability or impact
+  - **Contingency Plan** - What to do if it occurs
+  - **Risk Owner** - Suggested responsible party
+
+  ## Overall Risk Profile
+  - Summary of risk landscape
+  - Aggregate risk level: Low / Medium / High / Critical
+  - Go/No-Go recommendation with conditions
+parameters:
+  - name: proposal
+    type: string
+    required: true
+    description: "The proposal, plan, or decision to analyze for risks"
+  - name: subject
+    type: string
+    required: true
+    description: "Brief name of the proposal or project"
+  - name: risk_appetite
+    type: string
+    required: false
+    description: "Organization's risk tolerance (conservative, moderate, aggressive)"
+    default: "moderate"
+  - name: scope
+    type: string
+    required: false
+    description: "Scope of risk analysis (technical, financial, operational, comprehensive)"
+    default: "comprehensive"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1000
+  temperature: 0.4
+  tags: ["analysis", "risk", "assessment", "project-management"]
+examples:
+  - input:
+      proposal: "Migrate our entire infrastructure from on-premise to AWS over 6 months. Budget: $500K. Team: 5 engineers. Currently running 200 services with 99.9% SLA commitment. Plan includes lift-and-shift first, then optimize. No rollback plan documented."
+      subject: "Cloud Migration Project"
+      risk_appetite: "conservative"
+      scope: "comprehensive"
+    expected_output_contains: ["risk", "probability", "impact", "mitigation", "SLA", "rollback"]

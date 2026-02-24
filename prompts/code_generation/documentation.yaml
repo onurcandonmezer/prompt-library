@@ -1,0 +1,91 @@
+name: documentation
+version: "1.0"
+category: code_generation
+description: "Generate comprehensive code documentation including docstrings, README sections, and API docs"
+template: |
+  Generate documentation for the following code.
+
+  Documentation type: {doc_type}
+  Target audience: {audience}
+  Format: {format}
+
+  Code:
+  ```{language}
+  {code}
+  ```
+
+  Additional context:
+  {context}
+
+  {%- if doc_type == "docstring" %}
+  Generate detailed docstrings for all public functions, classes, and methods:
+  - Summary line describing purpose
+  - Extended description if behavior is non-obvious
+  - Parameters with types and descriptions
+  - Return values with types
+  - Exceptions that can be raised
+  - Usage examples in doctest format
+  {%- endif %}
+
+  {%- if doc_type == "readme" %}
+  Generate a README section covering:
+  - Overview and purpose
+  - Installation steps
+  - Quick start / usage examples
+  - Configuration options
+  - API reference summary
+  - Common patterns and best practices
+  {%- endif %}
+
+  {%- if doc_type == "api" %}
+  Generate API documentation covering:
+  - Endpoint descriptions
+  - Request/response schemas with examples
+  - Authentication requirements
+  - Rate limits and error codes
+  - Code examples in multiple languages
+  {%- endif %}
+
+  Write clearly for a {audience} audience. Avoid jargon unless the audience is technical.
+parameters:
+  - name: code
+    type: string
+    required: true
+    description: "The code to document"
+  - name: language
+    type: string
+    required: true
+    description: "Programming language of the code"
+  - name: doc_type
+    type: string
+    required: false
+    description: "Type of documentation (docstring, readme, api, inline-comments)"
+    default: "docstring"
+  - name: audience
+    type: string
+    required: false
+    description: "Target audience (beginner, intermediate, expert)"
+    default: "intermediate"
+  - name: format
+    type: string
+    required: false
+    description: "Documentation format (google-style, numpy-style, jsdoc, javadoc, markdown)"
+    default: "google-style"
+  - name: context
+    type: string
+    required: false
+    description: "Additional context about the project, conventions, or usage"
+    default: "none"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 800
+  temperature: 0.3
+  tags: ["code-generation", "documentation", "developer-experience"]
+examples:
+  - input:
+      code: "class DataPipeline:\n    def __init__(self, source, transforms=None):\n        self.source = source\n        self.transforms = transforms or []\n    \n    def add_transform(self, fn):\n        self.transforms.append(fn)\n        return self\n    \n    def execute(self, batch_size=100):\n        for batch in self.source.read(batch_size):\n            for transform in self.transforms:\n                batch = transform(batch)\n            yield batch"
+      language: "python"
+      doc_type: "docstring"
+      audience: "intermediate"
+      format: "google-style"
+    expected_output_contains: ["Args:", "Returns:", "Example:", "DataPipeline"]

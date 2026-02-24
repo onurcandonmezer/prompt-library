@@ -1,0 +1,79 @@
+name: key_value_extraction
+version: "1.0"
+category: data_extraction
+description: "Extract structured key-value pairs from unstructured or semi-structured text documents"
+template: |
+  Extract key-value pairs from the following text.
+
+  Expected fields: {expected_fields}
+  Output format: {output_format}
+  Handling missing values: {missing_handling}
+
+  Text:
+  {text}
+
+  Instructions:
+  1. Identify all key-value pairs present in the text
+  2. Normalize key names to consistent snake_case format
+  3. Clean and standardize values (trim whitespace, normalize formats)
+  4. For dates, use ISO 8601 format (YYYY-MM-DD)
+  5. For currency, include the currency symbol and numeric value
+  6. For boolean-like values, normalize to true/false
+
+  {%- if expected_fields != "auto-detect" %}
+  Expected fields to extract:
+  {expected_fields}
+  Mark any expected fields not found in the text as null with a note.
+  {%- endif %}
+
+  {%- if output_format == "json" %}
+  Output as clean JSON:
+  ```json
+  {{
+    "key_name": "extracted_value",
+    "another_key": "extracted_value"
+  }}
+  ```
+  {%- endif %}
+
+  {%- if output_format == "yaml" %}
+  Output as YAML:
+  ```yaml
+  key_name: extracted_value
+  another_key: extracted_value
+  ```
+  {%- endif %}
+
+  If a value is ambiguous, provide the most likely interpretation and flag it.
+parameters:
+  - name: text
+    type: string
+    required: true
+    description: "The text to extract key-value pairs from"
+  - name: expected_fields
+    type: string
+    required: false
+    description: "Specific fields to look for (comma-separated) or 'auto-detect'"
+    default: "auto-detect"
+  - name: output_format
+    type: string
+    required: false
+    description: "Output format (json, yaml, table, csv)"
+    default: "json"
+  - name: missing_handling
+    type: string
+    required: false
+    description: "How to handle missing values (null, omit, flag)"
+    default: "null"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 400
+  temperature: 0.1
+  tags: ["data-extraction", "key-value", "parsing", "structured-data"]
+examples:
+  - input:
+      text: "Invoice Number: INV-2025-0847\nDate Issued: January 15, 2025\nBill To: Acme Corporation\nAmount Due: $12,450.00\nPayment Terms: Net 30\nDue Date: February 14, 2025\nPO Number: PO-39281\nStatus: Pending"
+      expected_fields: "invoice_number, date_issued, bill_to, amount_due, payment_terms, due_date, po_number, status"
+      output_format: "json"
+      missing_handling: "null"
+    expected_output_contains: ["INV-2025-0847", "2025-01-15", "12450", "Acme"]

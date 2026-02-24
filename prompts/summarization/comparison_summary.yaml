@@ -1,0 +1,60 @@
+name: comparison_summary
+version: "1.0"
+category: summarization
+description: "Create structured comparison summaries between two or more items, products, or concepts"
+template: |
+  Create a comparison summary between the following items.
+
+  Items to compare: {item_a} vs {item_b}
+  Comparison criteria: {criteria}
+  Perspective: {perspective}
+
+  Information:
+  {content}
+
+  Structure your comparison as:
+  1. **Overview** - Brief introduction of both items
+  2. **Side-by-Side Comparison** - Key differences organized by criteria
+  3. **Strengths** - What each item does best
+  4. **Weaknesses** - Where each item falls short
+  5. **Use Case Fit** - Who or what scenario each item is best for
+  6. **Verdict** - Balanced conclusion with context-dependent recommendation
+
+  Be objective and evidence-based. Avoid bias toward either item.
+  Present trade-offs clearly so the reader can make their own informed decision.
+parameters:
+  - name: content
+    type: string
+    required: true
+    description: "The source material containing information about both items"
+  - name: item_a
+    type: string
+    required: true
+    description: "First item to compare"
+  - name: item_b
+    type: string
+    required: true
+    description: "Second item to compare"
+  - name: criteria
+    type: string
+    required: false
+    description: "Specific criteria to compare on (e.g., price, performance, usability)"
+    default: "auto-detect from content"
+  - name: perspective
+    type: string
+    required: false
+    description: "Perspective for the comparison (buyer, developer, manager, investor)"
+    default: "general"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 800
+  temperature: 0.4
+  tags: ["summarization", "comparison", "decision-making", "analysis"]
+examples:
+  - input:
+      content: "PostgreSQL is an open-source RDBMS with strong ACID compliance, complex query support, and extensibility. MySQL is also open-source, known for speed in read-heavy workloads, simpler setup, and wide hosting support. PostgreSQL supports JSON, full-text search, and custom types natively. MySQL has a larger community and more tutorials available. PostgreSQL handles concurrent writes better. MySQL is generally faster for simple SELECT queries."
+      item_a: "PostgreSQL"
+      item_b: "MySQL"
+      criteria: "performance, features, ease of use, community"
+      perspective: "developer"
+    expected_output_contains: ["PostgreSQL", "MySQL", "strength", "use case"]

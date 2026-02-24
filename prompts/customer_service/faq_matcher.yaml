@@ -1,0 +1,60 @@
+name: faq_matcher
+version: "1.0"
+category: customer_service
+description: "Match customer questions to the most relevant FAQ answers with confidence scores and follow-up suggestions"
+template: |
+  Match the following customer question to the most relevant FAQ answer.
+
+  Customer question:
+  {question}
+
+  Available FAQ entries:
+  {faq_entries}
+
+  Provide:
+
+  ## Best Match
+  - **FAQ ID / Title** - The most relevant FAQ entry
+  - **Confidence** - Match confidence (0-100%)
+  - **Relevance explanation** - Why this FAQ matches the question
+
+  ## Suggested Response
+  Craft a natural response that:
+  - Directly answers the customer's specific question
+  - Incorporates the FAQ information naturally (don't just copy-paste)
+  - Addresses any nuances in how the customer phrased their question
+  - Provides additional context if the FAQ doesn't fully address the question
+
+  ## Alternative Matches
+  List 2-3 other potentially relevant FAQ entries:
+  | FAQ | Confidence | Why it might be relevant |
+  |-----|------------|------------------------|
+
+  ## Gap Analysis
+  - **Fully answered?** - Yes / Partially / No
+  - **Missing information** - What the FAQ doesn't cover about this question
+  - **Suggested FAQ update** - If the existing FAQ should be improved
+  - **New FAQ needed?** - If a new FAQ entry should be created
+
+  ## Follow-up
+  - Suggested follow-up question to ask the customer for clarification
+  - Related topics the customer might also need help with
+parameters:
+  - name: question
+    type: string
+    required: true
+    description: "The customer's question or inquiry"
+  - name: faq_entries
+    type: string
+    required: true
+    description: "Available FAQ entries in 'Q: question A: answer' format"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 600
+  temperature: 0.3
+  tags: ["customer-service", "FAQ", "matching", "knowledge-base"]
+examples:
+  - input:
+      question: "How do I get my money back if I cancel my plan?"
+      faq_entries: "Q1: How do I cancel my subscription?\nA1: Go to Settings > Billing > Cancel Plan. Your access continues until the end of the billing period.\n\nQ2: What is your refund policy?\nA2: We offer a full refund within 14 days of purchase. After 14 days, we provide prorated refunds for annual plans. Monthly plans are not refundable but you keep access until period end.\n\nQ3: How do I upgrade my plan?\nA3: Go to Settings > Billing > Change Plan to upgrade. The price difference is prorated.\n\nQ4: Can I pause my subscription?\nA4: Yes, you can pause for up to 3 months. Go to Settings > Billing > Pause Plan."
+    expected_output_contains: ["refund", "Q2", "confidence", "cancel", "14 days"]

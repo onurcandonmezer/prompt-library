@@ -1,0 +1,80 @@
+name: escalation_detector
+version: "1.0"
+category: customer_service
+description: "Detect when a support interaction needs escalation based on sentiment, urgency, and issue complexity"
+template: |
+  Analyze the following support interaction and determine if escalation is needed.
+
+  Escalation policy: {escalation_policy}
+  Customer tier: {customer_tier}
+
+  Interaction:
+  {interaction}
+
+  Customer history (if available):
+  {customer_history}
+
+  Provide your escalation assessment:
+
+  ## Escalation Decision
+  - **Escalate?** - YES / NO / MONITOR
+  - **Urgency** - Immediate / Within 1 hour / Within 4 hours / Standard
+  - **Confidence** - How certain you are about this assessment (High/Medium/Low)
+
+  ## Escalation Triggers Detected
+  Check for these escalation signals:
+  - [ ] Customer explicitly requests manager/supervisor
+  - [ ] Threat to cancel or leave (churn risk)
+  - [ ] Legal or regulatory mention
+  - [ ] Safety or security concern
+  - [ ] Repeated contact for same issue (3+ times)
+  - [ ] Abusive or threatening language
+  - [ ] High-value customer at risk
+  - [ ] Issue beyond Tier 1 capabilities
+  - [ ] SLA breach or approaching breach
+  - [ ] Social media escalation threat
+  - [ ] Data loss or breach potential
+  - [ ] Financial impact on customer
+
+  ## Sentiment Analysis
+  - **Current sentiment** - Score from -5 (very negative) to +5 (very positive)
+  - **Sentiment trajectory** - Getting worse / Stable / Improving
+  - **Emotional state** - Primary emotions detected
+
+  ## Recommended Actions
+  - **Escalation path** - Who to escalate to (Tier 2, Manager, Engineering, Legal)
+  - **Immediate actions** - What to do right now
+  - **Talking points** - Key points for the person handling the escalation
+  - **De-escalation tactics** - If escalation can be avoided, how
+parameters:
+  - name: interaction
+    type: string
+    required: true
+    description: "The customer support interaction to analyze"
+  - name: customer_history
+    type: string
+    required: false
+    description: "Previous interactions or account history"
+    default: "not available"
+  - name: escalation_policy
+    type: string
+    required: false
+    description: "Company's escalation policies and criteria"
+    default: "standard"
+  - name: customer_tier
+    type: string
+    required: false
+    description: "Customer's service tier (free, pro, enterprise, VIP)"
+    default: "standard"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 600
+  temperature: 0.2
+  tags: ["customer-service", "escalation", "sentiment", "risk"]
+examples:
+  - input:
+      interaction: "Customer (3rd message): This is the THIRD time I'm contacting you about the same issue. My data export has been broken for two weeks. Nobody seems to care. I'm paying $500/month for enterprise and getting zero support. If this isn't fixed by tomorrow, I'm moving my entire team to your competitor. I want to speak to someone who can actually help."
+      customer_history: "Enterprise customer for 2 years. 2 previous tickets about export feature in last 14 days, both closed as resolved but issue recurred. Account value: $6000/year."
+      escalation_policy: "standard"
+      customer_tier: "enterprise"
+    expected_output_contains: ["YES", "immediate", "churn risk", "enterprise", "manager", "repeated"]

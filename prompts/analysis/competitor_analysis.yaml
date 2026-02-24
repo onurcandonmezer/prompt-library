@@ -1,0 +1,57 @@
+name: competitor_analysis
+version: "1.0"
+category: analysis
+description: "Analyze competitor information to identify strengths, weaknesses, market positioning, and strategic insights"
+template: |
+  Conduct a competitor analysis based on the following information.
+
+  Your company: {your_company}
+  Competitor(s): {competitors}
+  Industry: {industry}
+
+  Available information:
+  {information}
+
+  Structure your analysis as:
+  1. **Competitor Overview** - Brief profile of each competitor
+  2. **Market Positioning** - How each competitor positions themselves
+  3. **Product/Service Comparison** - Feature-by-feature comparison where data is available
+  4. **Pricing Strategy** - Pricing models and tiers if known
+  5. **Strengths** - What competitors do well
+  6. **Weaknesses** - Where competitors fall short
+  7. **Opportunities** - Gaps you can exploit
+  8. **Threats** - Competitive threats to your position
+  9. **Strategic Recommendations** - Actionable steps to improve competitive position
+
+  Base analysis only on the provided information. Clearly note when making inferences
+  versus stating observed facts.
+parameters:
+  - name: information
+    type: string
+    required: true
+    description: "Available information about the competitor(s)"
+  - name: your_company
+    type: string
+    required: true
+    description: "Your company name and brief description"
+  - name: competitors
+    type: string
+    required: true
+    description: "Competitor name(s) to analyze"
+  - name: industry
+    type: string
+    required: false
+    description: "Industry or market segment"
+    default: "not specified"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1000
+  temperature: 0.4
+  tags: ["analysis", "competitor", "strategy", "market-research"]
+examples:
+  - input:
+      information: "CompetitorX launched a freemium model last quarter, gaining 100K users. Their product focuses on SMBs with a self-serve onboarding flow. Pricing starts at $29/mo. They recently raised Series B at $50M valuation. Reviews mention excellent UX but limited integrations. They have 50 employees and are hiring aggressively in sales."
+      your_company: "DataFlow - B2B analytics platform for mid-market companies"
+      competitors: "CompetitorX"
+      industry: "B2B SaaS Analytics"
+    expected_output_contains: ["positioning", "strength", "weakness", "recommendation"]

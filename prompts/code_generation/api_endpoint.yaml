@@ -1,0 +1,70 @@
+name: api_endpoint
+version: "1.0"
+category: code_generation
+description: "Generate REST API endpoints with request validation, error handling, and documentation"
+template: |
+  Generate a REST API endpoint based on the following specification.
+
+  Framework: {framework}
+  HTTP method: {method}
+  Endpoint path: {path}
+  Authentication: {auth}
+
+  Specification:
+  {specification}
+
+  Include the following in your implementation:
+  1. **Route handler** - Main endpoint function with proper decorators
+  2. **Request validation** - Input validation with descriptive error messages
+  3. **Response format** - Consistent JSON response structure
+  4. **Error handling** - Proper HTTP status codes and error responses
+  5. **Authentication/Authorization** - {auth} implementation
+  6. **Documentation** - Inline API documentation (OpenAPI/Swagger compatible if applicable)
+
+  Response format should follow:
+  ```json
+  {{
+    "success": true/false,
+    "data": {{ ... }},
+    "error": {{ "code": "ERROR_CODE", "message": "Human-readable message" }},
+    "meta": {{ "timestamp": "...", "request_id": "..." }}
+  }}
+  ```
+
+  Include proper logging and any necessary middleware.
+parameters:
+  - name: specification
+    type: string
+    required: true
+    description: "Detailed API specification including inputs, outputs, and business logic"
+  - name: framework
+    type: string
+    required: false
+    description: "Web framework (fastapi, express, flask, django-rest, spring-boot)"
+    default: "fastapi"
+  - name: method
+    type: string
+    required: true
+    description: "HTTP method (GET, POST, PUT, PATCH, DELETE)"
+  - name: path
+    type: string
+    required: true
+    description: "API endpoint path (e.g., /api/v1/users)"
+  - name: auth
+    type: string
+    required: false
+    description: "Authentication method (none, api-key, jwt, oauth2)"
+    default: "jwt"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1000
+  temperature: 0.3
+  tags: ["code-generation", "API", "REST", "backend"]
+examples:
+  - input:
+      specification: "Create a user registration endpoint. Accept email, password (min 8 chars), and display name. Check for duplicate emails. Hash password before storage. Return created user without password. Send welcome email asynchronously."
+      framework: "fastapi"
+      method: "POST"
+      path: "/api/v1/users/register"
+      auth: "none"
+    expected_output_contains: ["async", "POST", "email", "password", "hash", "422", "201"]

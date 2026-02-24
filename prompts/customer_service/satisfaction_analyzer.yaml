@@ -1,0 +1,73 @@
+name: satisfaction_analyzer
+version: "1.0"
+category: customer_service
+description: "Analyze customer satisfaction from feedback, surveys, reviews, or support interactions"
+template: |
+  Analyze customer satisfaction from the following feedback.
+
+  Feedback source: {source}
+  Analysis scope: {scope}
+
+  Feedback data:
+  {feedback}
+
+  Provide a comprehensive satisfaction analysis:
+
+  ## Overall Satisfaction
+  - **Score** - Estimated CSAT score (1-5 scale)
+  - **NPS category** - Promoter (9-10) / Passive (7-8) / Detractor (0-6)
+  - **Satisfaction level** - Very Satisfied / Satisfied / Neutral / Dissatisfied / Very Dissatisfied
+  - **Confidence** - How reliable this assessment is (High/Medium/Low)
+
+  ## Satisfaction Drivers
+  ### Positive Drivers
+  - What the customer appreciates (with evidence from text)
+
+  ### Negative Drivers
+  - What the customer is unhappy about (with evidence from text)
+
+  ## Dimension Analysis
+  Rate satisfaction (1-5) across key dimensions:
+  | Dimension | Score | Evidence |
+  |-----------|-------|----------|
+  | Product Quality | | |
+  | Customer Service | | |
+  | Value for Money | | |
+  | Ease of Use | | |
+  | Reliability | | |
+
+  ## Risk Assessment
+  - **Churn risk** - Low / Medium / High
+  - **Advocacy potential** - Will they recommend? Low / Medium / High
+  - **Upsell potential** - Low / Medium / High
+
+  ## Actionable Insights
+  - **Quick wins** - Immediate improvements that would increase satisfaction
+  - **Systemic issues** - Deeper problems that need structural fixes
+  - **Follow-up needed** - Whether and how to follow up with this customer
+parameters:
+  - name: feedback
+    type: string
+    required: true
+    description: "Customer feedback text (survey response, review, email, chat transcript)"
+  - name: source
+    type: string
+    required: false
+    description: "Source of feedback (survey, review, email, chat, social-media, interview)"
+    default: "survey"
+  - name: scope
+    type: string
+    required: false
+    description: "Analysis scope (individual, batch, trends)"
+    default: "individual"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 700
+  temperature: 0.3
+  tags: ["customer-service", "satisfaction", "CSAT", "NPS", "feedback"]
+examples:
+  - input:
+      feedback: "Overall I like the product - it does what it promises. The recent UI update made things easier to find. However, I've had to contact support three times this month, and wait times are getting longer each time. Pricing is fair for what you get. I renewed my annual plan but almost didn't because of the support experience. Would be great if you added Slack integration."
+      source: "survey"
+      scope: "individual"
+    expected_output_contains: ["score", "positive", "negative", "support", "churn risk", "Slack"]

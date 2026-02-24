@@ -1,0 +1,55 @@
+name: changelog_summary
+version: "1.0"
+category: summarization
+description: "Summarize software changelogs into user-friendly release notes highlighting what matters most"
+template: |
+  Summarize the following software changelog into user-friendly release notes.
+
+  Product name: {product_name}
+  Target audience: {audience}
+  Version: {version}
+
+  Changelog:
+  {changelog}
+
+  Format the summary as:
+  1. **Highlights** - Top 2-3 most impactful changes in plain language
+  2. **New Features** - What users can now do that they couldn't before
+  3. **Improvements** - Enhancements to existing functionality
+  4. **Bug Fixes** - Notable bugs that were resolved (group minor ones)
+  5. **Breaking Changes** - Anything that requires user action to upgrade
+  6. **Migration Notes** - Steps users need to take, if any
+
+  Write in a way that {audience} can understand. Translate technical jargon into
+  user benefits. Lead with impact, not implementation details.
+parameters:
+  - name: changelog
+    type: string
+    required: true
+    description: "The raw changelog or commit history to summarize"
+  - name: product_name
+    type: string
+    required: true
+    description: "Name of the software product"
+  - name: version
+    type: string
+    required: false
+    description: "Version number for this release"
+    default: "latest"
+  - name: audience
+    type: string
+    required: false
+    description: "Target audience (developers, end-users, administrators)"
+    default: "end-users"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 600
+  temperature: 0.4
+  tags: ["summarization", "changelog", "release-notes", "software"]
+examples:
+  - input:
+      changelog: "- feat: add dark mode support (#1234)\n- fix: resolve memory leak in dashboard component (#1235)\n- feat: SSO integration with SAML 2.0 (#1236)\n- chore: upgrade React from 18.2 to 19.0 (#1237)\n- fix: correct timezone handling in reports (#1238)\n- BREAKING: remove deprecated v1 API endpoints (#1239)\n- feat: add CSV export for all reports (#1240)\n- fix: typo in settings page (#1241)"
+      product_name: "Acme Dashboard"
+      version: "3.0.0"
+      audience: "end-users"
+    expected_output_contains: ["dark mode", "export", "breaking", "SSO"]

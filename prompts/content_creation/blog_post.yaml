@@ -1,0 +1,68 @@
+name: blog_post
+version: "1.0"
+category: content_creation
+description: "Draft engaging blog posts with SEO optimization, clear structure, and audience-appropriate tone"
+template: |
+  Write a blog post on the following topic.
+
+  Topic: {topic}
+  Target audience: {audience}
+  Tone: {tone}
+  Word count: {word_count}
+  SEO keywords: {keywords}
+
+  Structure the blog post with:
+  1. **Title** - Compelling, SEO-friendly title (under 60 characters)
+  2. **Hook** - Engaging opening paragraph that draws readers in
+  3. **Introduction** - Set up the problem or topic context
+  4. **Main Body** - 3-5 sections with descriptive subheadings (H2)
+     - Each section should have a clear point
+     - Include specific examples, data, or anecdotes
+     - Use short paragraphs (3-4 sentences max)
+  5. **Practical Takeaways** - Actionable advice readers can apply
+  6. **Conclusion** - Summarize key points and include a call-to-action
+  7. **Meta description** - 155-character SEO meta description
+
+  Writing guidelines:
+  - Use {tone} tone throughout
+  - Naturally incorporate SEO keywords without keyword stuffing
+  - Include transition sentences between sections
+  - Break up text with bullet points and numbered lists where appropriate
+  - Write for scannability with clear formatting
+parameters:
+  - name: topic
+    type: string
+    required: true
+    description: "The blog post topic or title idea"
+  - name: audience
+    type: string
+    required: true
+    description: "Target audience (e.g., developers, marketers, executives, general public)"
+  - name: tone
+    type: string
+    required: false
+    description: "Writing tone (professional, conversational, technical, inspirational, humorous)"
+    default: "conversational"
+  - name: word_count
+    type: integer
+    required: false
+    description: "Target word count"
+    default: 1200
+  - name: keywords
+    type: string
+    required: false
+    description: "SEO keywords to incorporate naturally"
+    default: "auto-detect from topic"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 2000
+  temperature: 0.7
+  tags: ["content-creation", "blog", "SEO", "writing"]
+examples:
+  - input:
+      topic: "How AI is Transforming Small Business Operations in 2025"
+      audience: "small business owners"
+      tone: "conversational"
+      word_count: 1000
+      keywords: "AI for small business, automation, productivity tools"
+    expected_output_contains: ["title", "introduction", "AI", "small business", "conclusion", "meta description"]

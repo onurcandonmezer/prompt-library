@@ -1,0 +1,76 @@
+name: feasibility_analysis
+version: "1.0"
+category: analysis
+description: "Assess the feasibility of a project or initiative across technical, financial, operational, and schedule dimensions"
+template: |
+  Assess the feasibility of the following project or initiative.
+
+  Project: {project}
+  Assessment scope: {scope}
+  Decision deadline: {deadline}
+
+  Project details:
+  {details}
+
+  Evaluate feasibility across these dimensions:
+
+  ## Technical Feasibility
+  - Can this be built/implemented with available technology?
+  - What technical skills are required vs. available?
+  - Are there proven solutions or is this novel?
+  - Technical risk level: Low / Medium / High
+
+  ## Financial Feasibility
+  - Estimated cost vs. available budget
+  - Expected ROI or payback period
+  - Funding requirements and sources
+  - Financial risk level: Low / Medium / High
+
+  ## Operational Feasibility
+  - Does this fit within current operations?
+  - Organizational readiness and change management needs
+  - Resource availability (people, equipment, facilities)
+  - Operational risk level: Low / Medium / High
+
+  ## Schedule Feasibility
+  - Can this be completed in the proposed timeline?
+  - Key milestones and dependencies
+  - Schedule risk level: Low / Medium / High
+
+  ## Overall Feasibility Assessment
+  - **Feasibility Score** - 1 (Not Feasible) to 10 (Highly Feasible)
+  - **Recommendation** - Proceed / Proceed with conditions / Delay / Do not proceed
+  - **Critical Success Factors** - What must go right
+  - **Deal Breakers** - What would make this infeasible
+  - **Alternatives Considered** - Other approaches if this is not feasible
+parameters:
+  - name: details
+    type: string
+    required: true
+    description: "Detailed description of the project including scope, timeline, budget, and resources"
+  - name: project
+    type: string
+    required: true
+    description: "Project or initiative name"
+  - name: scope
+    type: string
+    required: false
+    description: "Which feasibility dimensions to assess (all, technical, financial, operational, schedule)"
+    default: "all"
+  - name: deadline
+    type: string
+    required: false
+    description: "When the feasibility decision needs to be made"
+    default: "not specified"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1000
+  temperature: 0.4
+  tags: ["analysis", "feasibility", "project-management", "decision-making"]
+examples:
+  - input:
+      details: "Build an AI-powered customer service chatbot. Budget: $200K. Timeline: 4 months. Team: 2 ML engineers, 1 frontend developer, 1 PM. Need to integrate with existing Zendesk and Salesforce systems. Must handle 10,000 conversations/day. Must support English and Spanish. Must maintain 95% customer satisfaction. Currently have no ML infrastructure."
+      project: "AI Customer Service Chatbot"
+      scope: "all"
+      deadline: "end of month"
+    expected_output_contains: ["technical", "financial", "operational", "feasibility", "recommendation"]

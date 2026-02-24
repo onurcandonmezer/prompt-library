@@ -1,0 +1,48 @@
+name: meeting_notes
+version: "1.0"
+category: summarization
+description: "Summarize meeting transcripts into structured notes with key decisions, action items, and follow-ups"
+template: |
+  You are a skilled meeting facilitator. Summarize the following meeting transcript into well-structured meeting notes.
+
+  Meeting type: {meeting_type}
+  Participants: {participants}
+
+  Transcript:
+  {transcript}
+
+  Format the summary as:
+  1. **Meeting Overview** - Date, type, participants, and purpose
+  2. **Key Discussion Points** - Main topics discussed with brief context
+  3. **Decisions Made** - Clear list of decisions with rationale
+  4. **Action Items** - Each item with owner, deadline, and description
+  5. **Open Questions** - Unresolved items requiring follow-up
+  6. **Next Steps** - Agreed next meeting or milestones
+
+  Use clear, concise language. Attribute action items to specific people when mentioned.
+parameters:
+  - name: transcript
+    type: string
+    required: true
+    description: "The full meeting transcript text"
+  - name: meeting_type
+    type: string
+    required: false
+    description: "Type of meeting (e.g., standup, sprint planning, board meeting, project kickoff)"
+    default: "general"
+  - name: participants
+    type: string
+    required: false
+    description: "List of meeting participants"
+    default: "not specified"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 800
+  temperature: 0.3
+  tags: ["summarization", "meetings", "action-items", "productivity"]
+examples:
+  - input:
+      transcript: "John: Let's discuss the Q4 roadmap. Sarah: I think we should prioritize the mobile app redesign. Mike: Agreed, but we need to hire two more designers first. John: OK, Mike can you start the hiring process by Friday? Sarah: I'll draft the design spec by next Wednesday. John: Great, let's reconvene next Monday to review progress."
+      meeting_type: "project planning"
+      participants: "John (PM), Sarah (Design Lead), Mike (Engineering Manager)"
+    expected_output_contains: ["action item", "mobile app", "hiring", "deadline"]

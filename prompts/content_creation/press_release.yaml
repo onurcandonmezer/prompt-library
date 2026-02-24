@@ -1,0 +1,76 @@
+name: press_release
+version: "1.0"
+category: content_creation
+description: "Draft professional press releases following AP style with proper structure and media-ready formatting"
+template: |
+  Draft a press release based on the following information.
+
+  Company: {company}
+  Announcement type: {announcement_type}
+  Target media: {target_media}
+  Embargo: {embargo}
+
+  Announcement details:
+  {details}
+
+  Follow standard press release format:
+
+  1. **FOR IMMEDIATE RELEASE** (or embargo notice)
+  2. **Headline** - Newsworthy, factual, under 80 characters
+  3. **Subheadline** - Additional context, under 120 characters
+  4. **Dateline** - City, State, Date
+  5. **Lead paragraph** - Who, What, When, Where, Why in the first paragraph
+  6. **Body paragraphs:**
+     - Paragraph 2: Expand on the news significance and impact
+     - Paragraph 3: Supporting quote from company executive
+     - Paragraph 4: Additional details, data, or context
+     - Paragraph 5: Supporting quote from partner/customer (if applicable)
+     - Paragraph 6: Availability, pricing, or next steps
+  7. **Boilerplate** - About the company (2-3 sentences)
+  8. **Media contact** - Placeholder for contact information
+  9. **###** (end mark)
+
+  Writing guidelines:
+  - Use AP style (no Oxford comma, proper title capitalization)
+  - Lead with the most newsworthy angle
+  - Keep to 400-500 words total
+  - Write in third person
+  - Include concrete data and metrics where available
+  - Quotes should sound natural, not promotional
+parameters:
+  - name: details
+    type: string
+    required: true
+    description: "All relevant details about the announcement"
+  - name: company
+    type: string
+    required: true
+    description: "Company name and brief description"
+  - name: announcement_type
+    type: string
+    required: false
+    description: "Type of announcement (product launch, partnership, funding, acquisition, milestone, event)"
+    default: "general announcement"
+  - name: target_media
+    type: string
+    required: false
+    description: "Target media outlets or industry (tech, business, consumer, trade)"
+    default: "general business"
+  - name: embargo
+    type: string
+    required: false
+    description: "Embargo date/time if applicable"
+    default: "FOR IMMEDIATE RELEASE"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 800
+  temperature: 0.5
+  tags: ["content-creation", "press-release", "PR", "communications"]
+examples:
+  - input:
+      details: "DataViz Inc. has raised $25M in Series B funding led by Venture Capital Partners. The funding will be used to expand into European markets and hire 50 engineers. The company has grown 300% YoY and serves 500 enterprise customers. CEO Jane Smith says this validates their AI-first approach to data visualization."
+      company: "DataViz Inc. - AI-powered data visualization platform"
+      announcement_type: "funding"
+      target_media: "tech"
+      embargo: "FOR IMMEDIATE RELEASE"
+    expected_output_contains: ["RELEASE", "$25M", "Series B", "quote", "boilerplate", "###"]

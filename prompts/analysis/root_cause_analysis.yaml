@@ -1,0 +1,76 @@
+name: root_cause_analysis
+version: "1.0"
+category: analysis
+description: "Systematically analyze problems to identify root causes using structured methodologies like 5 Whys and Fishbone"
+template: |
+  Perform a root cause analysis on the following problem.
+
+  Problem statement: {problem}
+  Impact: {impact}
+  Method: {method}
+
+  Context and available data:
+  {context}
+
+  Provide your analysis using the {method} methodology:
+
+  {%- if method == "5_whys" %}
+  ## 5 Whys Analysis
+  For each causal chain:
+  1. Why did [problem] occur? -> Because...
+  2. Why did that happen? -> Because...
+  3. Why? -> Because...
+  4. Why? -> Because...
+  5. Why? -> Because... (root cause)
+  {%- endif %}
+
+  {%- if method == "fishbone" %}
+  ## Fishbone (Ishikawa) Diagram Analysis
+  Analyze potential causes across these categories:
+  - **People** - Human factors, skills, training
+  - **Process** - Workflow, procedures, methods
+  - **Technology** - Tools, systems, equipment
+  - **Environment** - External factors, conditions
+  - **Materials** - Inputs, data, resources
+  - **Management** - Policies, decisions, oversight
+  {%- endif %}
+
+  ## Root Cause(s) Identified
+  List the most likely root cause(s) with supporting evidence.
+
+  ## Corrective Actions
+  Recommend immediate and long-term corrective actions.
+
+  ## Prevention Measures
+  Suggest systemic changes to prevent recurrence.
+parameters:
+  - name: problem
+    type: string
+    required: true
+    description: "Clear statement of the problem to analyze"
+  - name: context
+    type: string
+    required: true
+    description: "Background information, timeline, data, and observations"
+  - name: impact
+    type: string
+    required: false
+    description: "Description of the problem's impact"
+    default: "not specified"
+  - name: method
+    type: string
+    required: false
+    description: "Analysis method (5_whys, fishbone, combined)"
+    default: "combined"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 900
+  temperature: 0.4
+  tags: ["analysis", "root-cause", "problem-solving", "quality"]
+examples:
+  - input:
+      problem: "Production API response times increased from 200ms to 2000ms over the past week"
+      context: "Deployed v3.2 last Monday. Database CPU at 90%. No increase in traffic. New feature added that queries a join across 3 tables. No index changes were made. Monitoring shows slow queries spiking after deployment."
+      impact: "Customer-facing latency causing 15% increase in cart abandonment"
+      method: "5_whys"
+    expected_output_contains: ["root cause", "query", "index", "corrective", "prevention"]

@@ -1,0 +1,69 @@
+name: action_item_extraction
+version: "1.0"
+category: data_extraction
+description: "Extract action items, tasks, and to-dos from meeting notes, emails, or documents with owners and deadlines"
+template: |
+  Extract all action items from the following text.
+
+  Context: {context}
+  Output format: {output_format}
+
+  Text:
+  {text}
+
+  For each action item, extract:
+  - **ID** - Sequential identifier (AI-001, AI-002, etc.)
+  - **Action** - Clear, specific description of what needs to be done
+  - **Owner** - Person responsible (name or role, "Unassigned" if not specified)
+  - **Deadline** - Due date or timeframe ("ASAP", specific date, or "Not specified")
+  - **Priority** - High / Medium / Low (inferred from language and context)
+  - **Status** - New / In Progress / Blocked / Completed (inferred from context)
+  - **Dependencies** - Other action items or external factors this depends on
+  - **Source quote** - The original text that implies this action item
+
+  Detection rules:
+  - Look for imperative verbs: "send", "create", "review", "schedule", "follow up"
+  - Look for commitment phrases: "I'll", "we need to", "please", "make sure to"
+  - Look for assignment patterns: "[person] will", "[person] to", "assigned to [person]"
+  - Look for deadline indicators: "by Friday", "before the meeting", "this week"
+  - Distinguish between action items and informational statements
+
+  {%- if output_format == "json" %}
+  Output as JSON array.
+  {%- endif %}
+
+  {%- if output_format == "table" %}
+  Output as a markdown table.
+  {%- endif %}
+
+  Summary:
+  - Total action items found
+  - Items by owner
+  - Items by priority
+  - Items without assigned owners or deadlines
+parameters:
+  - name: text
+    type: string
+    required: true
+    description: "The text to extract action items from (meeting notes, emails, etc.)"
+  - name: context
+    type: string
+    required: false
+    description: "Context about the text source (meeting notes, email thread, project update)"
+    default: "general"
+  - name: output_format
+    type: string
+    required: false
+    description: "Output format (json, table, checklist)"
+    default: "table"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 600
+  temperature: 0.2
+  tags: ["data-extraction", "action-items", "productivity", "project-management"]
+examples:
+  - input:
+      text: "Sarah will send the updated proposal to the client by Thursday. We need someone to review the security audit findings - John, can you take that? Please schedule the next sprint planning for early next week. Mike mentioned he's blocked on the API integration until DevOps provisions the staging environment. The marketing team should have the launch materials ready by March 1st."
+      context: "team meeting notes"
+      output_format: "table"
+    expected_output_contains: ["Sarah", "proposal", "Thursday", "John", "security", "owner", "deadline"]

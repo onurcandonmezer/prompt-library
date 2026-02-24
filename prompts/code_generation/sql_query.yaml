@@ -1,0 +1,69 @@
+name: sql_query
+version: "1.0"
+category: code_generation
+description: "Generate optimized SQL queries with proper joins, indexing hints, and explanatory comments"
+template: |
+  Generate a SQL query based on the following requirements.
+
+  Database: {database}
+  Dialect: {dialect}
+  Optimization priority: {optimization}
+
+  Schema:
+  {schema}
+
+  Requirements:
+  {requirements}
+
+  Provide:
+  1. **The SQL query** - Well-formatted with:
+     - Descriptive aliases for tables and columns
+     - Comments explaining complex logic
+     - Proper JOIN types with clear ON conditions
+     - WHERE clause optimization
+  2. **Query explanation** - Step-by-step explanation of what the query does
+  3. **Performance considerations** - Suggested indexes and optimization notes
+  4. **Alternative approaches** - Simpler or more performant alternatives if applicable
+  5. **Edge cases** - NULL handling, empty results, and data type considerations
+
+  Format the SQL with:
+  - Uppercase keywords (SELECT, FROM, WHERE, etc.)
+  - One clause per line for readability
+  - Indented subqueries and conditions
+  - Meaningful aliases (not single letters)
+parameters:
+  - name: requirements
+    type: string
+    required: true
+    description: "What the query should retrieve or modify, in plain language"
+  - name: schema
+    type: string
+    required: true
+    description: "Relevant table schemas with column names and types"
+  - name: database
+    type: string
+    required: false
+    description: "Database system (postgresql, mysql, sqlite, mssql, oracle)"
+    default: "postgresql"
+  - name: dialect
+    type: string
+    required: false
+    description: "Specific SQL dialect features to use or avoid"
+    default: "standard"
+  - name: optimization
+    type: string
+    required: false
+    description: "Optimization priority (readability, performance, both)"
+    default: "both"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 700
+  temperature: 0.2
+  tags: ["code-generation", "SQL", "database", "queries"]
+examples:
+  - input:
+      requirements: "Find the top 10 customers by total order value in the last 90 days, including their email, total orders, and average order value. Exclude cancelled orders."
+      schema: "customers(id, name, email, created_at)\norders(id, customer_id, total_amount, status, created_at)\nstatus values: 'pending', 'completed', 'cancelled'"
+      database: "postgresql"
+      optimization: "performance"
+    expected_output_contains: ["SELECT", "JOIN", "GROUP BY", "ORDER BY", "LIMIT", "cancelled"]

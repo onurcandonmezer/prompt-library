@@ -1,0 +1,59 @@
+name: bullet_points
+version: "1.0"
+category: summarization
+description: "Convert lengthy text into organized, scannable bullet points with optional grouping by theme"
+template: |
+  Convert the following text into clear, concise bullet points.
+
+  Grouping: {grouping}
+  Max bullets per group: {max_bullets}
+  Bullet style: {bullet_style}
+
+  Text:
+  {text}
+
+  Guidelines:
+  - Each bullet should be a complete, self-contained point
+  - Keep each bullet to one line (max 20 words)
+  - Use parallel grammatical structure across bullets
+  - Start each bullet with an action verb or key noun
+  - Eliminate redundancy and filler words
+  - Preserve critical numbers, names, and dates
+  {%- if grouping == "themed" %}
+  - Group related bullets under descriptive subheadings
+  {%- endif %}
+  {%- if grouping == "priority" %}
+  - Order bullets from most to least important
+  {%- endif %}
+parameters:
+  - name: text
+    type: string
+    required: true
+    description: "The text to convert into bullet points"
+  - name: grouping
+    type: string
+    required: false
+    description: "How to organize bullets (none, themed, chronological, priority)"
+    default: "themed"
+  - name: max_bullets
+    type: integer
+    required: false
+    description: "Maximum number of bullet points per group"
+    default: 7
+  - name: bullet_style
+    type: string
+    required: false
+    description: "Style of bullets (concise, detailed, action-oriented)"
+    default: "concise"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 400
+  temperature: 0.3
+  tags: ["summarization", "formatting", "bullet-points", "productivity"]
+examples:
+  - input:
+      text: "The company launched three new products this quarter. The mobile app saw 50,000 downloads in the first week. Revenue from the new product line exceeded projections by 20%. Customer support tickets related to onboarding decreased by 35% after the UX redesign. The engineering team completed migration to the new cloud infrastructure, reducing hosting costs by 40%. Two senior engineers were promoted to lead architect roles."
+      grouping: "themed"
+      max_bullets: 5
+      bullet_style: "concise"
+    expected_output_contains: ["product", "revenue", "engineering"]

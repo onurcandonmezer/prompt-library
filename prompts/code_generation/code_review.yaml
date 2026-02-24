@@ -1,0 +1,94 @@
+name: code_review
+version: "1.0"
+category: code_generation
+description: "Review code for bugs, security issues, performance problems, and adherence to best practices"
+template: |
+  Perform a thorough code review on the following code.
+
+  Review focus: {focus}
+  Severity threshold: {severity_threshold}
+  Standards: {standards}
+
+  Code:
+  ```{language}
+  {code}
+  ```
+
+  Context:
+  {context}
+
+  Provide your review organized by category:
+
+  ## Critical Issues (Must Fix)
+  Issues that could cause bugs, security vulnerabilities, or data loss.
+  For each issue:
+  - **Line(s):** Reference to the problematic code
+  - **Issue:** Clear description of the problem
+  - **Impact:** What could go wrong
+  - **Fix:** Specific code to fix the issue
+
+  ## Warnings (Should Fix)
+  Issues that may cause problems or indicate poor practices.
+
+  ## Suggestions (Nice to Have)
+  Improvements for readability, performance, or maintainability.
+
+  ## Security Review
+  - Input validation concerns
+  - Injection vulnerabilities
+  - Authentication/authorization issues
+  - Data exposure risks
+
+  ## Performance Review
+  - Algorithmic complexity concerns
+  - Memory usage issues
+  - Unnecessary computations
+
+  ## Positive Aspects
+  What the code does well - acknowledge good patterns and practices.
+
+  ## Summary
+  - Total issues found by severity
+  - Overall code quality rating: A (Excellent) / B (Good) / C (Needs Work) / D (Significant Issues) / F (Critical)
+  - Top 3 priority fixes
+parameters:
+  - name: code
+    type: string
+    required: true
+    description: "The code to review"
+  - name: language
+    type: string
+    required: true
+    description: "Programming language of the code"
+  - name: focus
+    type: string
+    required: false
+    description: "Review focus areas (bugs, security, performance, style, all)"
+    default: "all"
+  - name: severity_threshold
+    type: string
+    required: false
+    description: "Minimum severity to report (critical, warning, suggestion, all)"
+    default: "all"
+  - name: standards
+    type: string
+    required: false
+    description: "Coding standards to apply (PEP8, airbnb, google, custom)"
+    default: "language-default"
+  - name: context
+    type: string
+    required: false
+    description: "Context about the project, what the code does, and any known issues"
+    default: "none"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1000
+  temperature: 0.2
+  tags: ["code-generation", "code-review", "quality", "security"]
+examples:
+  - input:
+      code: "import sqlite3\n\ndef get_user(username):\n    conn = sqlite3.connect('app.db')\n    query = f\"SELECT * FROM users WHERE username = '{username}'\"\n    result = conn.execute(query).fetchone()\n    return result\n\ndef save_password(user_id, password):\n    conn = sqlite3.connect('app.db')\n    conn.execute(f\"UPDATE users SET password = '{password}' WHERE id = {user_id}\")\n    conn.commit()"
+      language: "python"
+      focus: "security"
+      context: "User authentication module for a web application"
+    expected_output_contains: ["SQL injection", "critical", "parameterized", "password", "hashing"]

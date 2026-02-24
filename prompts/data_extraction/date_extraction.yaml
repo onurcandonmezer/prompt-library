@@ -1,0 +1,66 @@
+name: date_extraction
+version: "1.0"
+category: data_extraction
+description: "Extract dates, deadlines, time references, and temporal expressions from text with normalization"
+template: |
+  Extract all dates, deadlines, and temporal references from the following text.
+
+  Reference date: {reference_date}
+  Output format: {output_format}
+  Include relative dates: {include_relative}
+
+  Text:
+  {text}
+
+  For each temporal reference found, provide:
+  - **Original text** - The exact text as it appears
+  - **Normalized date** - ISO 8601 format (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS)
+  - **Type** - Specific date / Date range / Deadline / Recurring / Relative
+  - **Context** - What this date refers to (event, deadline, milestone)
+  - **Certainty** - Definite / Tentative / Approximate
+
+  Handle these date formats:
+  - Explicit dates: "January 15, 2025", "01/15/2025", "15-Jan-2025"
+  - Relative dates: "next Monday", "in 3 weeks", "end of quarter"
+  - Ranges: "from March to June", "Q2 2025"
+  - Recurring: "every Tuesday", "monthly", "annually"
+  - Deadlines: "by Friday", "due date: March 1", "no later than..."
+  - Approximate: "around mid-March", "early Q3", "sometime next week"
+
+  {%- if include_relative == true %}
+  For relative dates, resolve them using the reference date: {reference_date}
+  {%- endif %}
+
+  Sort results chronologically. Flag any ambiguous dates (e.g., 01/02/2025 could be Jan 2 or Feb 1).
+parameters:
+  - name: text
+    type: string
+    required: true
+    description: "The text to extract dates from"
+  - name: reference_date
+    type: string
+    required: false
+    description: "Reference date for resolving relative dates (YYYY-MM-DD)"
+    default: "today"
+  - name: output_format
+    type: string
+    required: false
+    description: "Output format (json, table, timeline)"
+    default: "json"
+  - name: include_relative
+    type: boolean
+    required: false
+    description: "Whether to resolve relative dates to absolute dates"
+    default: true
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 500
+  temperature: 0.1
+  tags: ["data-extraction", "dates", "temporal", "scheduling"]
+examples:
+  - input:
+      text: "The project kicks off on March 3, 2025. Phase 1 deliverables are due by end of Q1. We have a checkpoint meeting every other Friday. The final presentation is tentatively scheduled for sometime in mid-June. Budget approval must be completed no later than February 28. The team will take a break during the last week of December."
+      reference_date: "2025-02-15"
+      output_format: "json"
+      include_relative: true
+    expected_output_contains: ["2025-03-03", "deadline", "recurring", "Q1", "June"]

@@ -1,0 +1,91 @@
+name: complaint_handler
+version: "1.0"
+category: customer_service
+description: "Handle customer complaints with empathetic responses, resolution options, and retention strategies"
+template: |
+  Handle the following customer complaint.
+
+  Company: {company}
+  Agent authority level: {authority_level}
+  Available resolutions: {available_resolutions}
+
+  Complaint:
+  {complaint}
+
+  Customer details:
+  {customer_details}
+
+  Provide a comprehensive complaint handling plan:
+
+  ## Complaint Analysis
+  - **Issue category** - Product / Service / Billing / Delivery / Communication / Other
+  - **Severity** - Critical / High / Medium / Low
+  - **Customer emotion** - Primary emotional state
+  - **Validity** - Legitimate complaint / Misunderstanding / Unreasonable expectation
+  - **Root cause** - What actually went wrong
+
+  ## Response Strategy
+  Using the HEARD framework:
+  1. **Hear** - Acknowledge what the customer is saying
+  2. **Empathize** - Show you understand their frustration
+  3. **Apologize** - Take appropriate responsibility
+  4. **Resolve** - Offer specific resolution options
+  5. **Diagnose** - Explain what caused the issue and how you'll prevent it
+
+  ## Proposed Response
+  Draft a complete response that:
+  - Opens with empathy (not a generic "I'm sorry")
+  - Takes ownership without over-apologizing
+  - Offers 2-3 resolution options within your authority
+  - Sets clear expectations for timeline
+  - Closes with commitment to follow up
+
+  ## Resolution Options
+  | Option | Description | Cost | Customer Impact | Recommended? |
+  |--------|-------------|------|-----------------|-------------|
+
+  ## Retention Risk
+  - **Churn probability** - Low / Medium / High
+  - **Customer lifetime value** - Context for resolution investment
+  - **Recovery strategy** - How to turn this into a positive experience
+
+  ## Prevention
+  - What systemic change would prevent this complaint from recurring
+parameters:
+  - name: complaint
+    type: string
+    required: true
+    description: "The customer's complaint message"
+  - name: customer_details
+    type: string
+    required: false
+    description: "Customer account details, history, and tier"
+    default: "not available"
+  - name: company
+    type: string
+    required: false
+    description: "Company name for the response"
+    default: "our company"
+  - name: authority_level
+    type: string
+    required: false
+    description: "Agent's resolution authority (tier-1, tier-2, manager)"
+    default: "tier-1"
+  - name: available_resolutions
+    type: string
+    required: false
+    description: "Resolutions the agent can offer (refund, credit, replacement, escalation)"
+    default: "credit up to $50, free month extension, escalation to manager"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 900
+  temperature: 0.4
+  tags: ["customer-service", "complaints", "retention", "conflict-resolution"]
+examples:
+  - input:
+      complaint: "I ordered your premium plan specifically because your website says '99.9% uptime guarantee.' In the last month alone, your service went down THREE times during business hours, costing me at least $5,000 in lost sales. Your status page says 'minor incident' but losing access to my entire inventory system for 4 hours is NOT minor. I want compensation for my losses and a guarantee this won't happen again."
+      customer_details: "Pro plan customer for 8 months. $199/month. E-commerce business. 3 documented outages affecting this customer in past 30 days."
+      company: "ShopEngine"
+      authority_level: "tier-2"
+      available_resolutions: "credit up to $200, free month extension, SLA credit per policy, escalation to VP of Customer Success"
+    expected_output_contains: ["empathize", "uptime", "resolution", "credit", "prevention", "HEARD"]

@@ -1,0 +1,75 @@
+name: contact_extraction
+version: "1.0"
+category: data_extraction
+description: "Extract contact information including names, emails, phone numbers, and addresses from text"
+template: |
+  Extract all contact information from the following text.
+
+  Output format: {output_format}
+  Validation: {validate}
+
+  Text:
+  {text}
+
+  Extract the following contact details for each person or organization found:
+  - **Full name** - First and last name, including titles (Mr., Dr., etc.)
+  - **Job title / Role** - Professional title or position
+  - **Organization** - Company or organization name
+  - **Email** - Email address(es)
+  - **Phone** - Phone number(s) with type (mobile, office, fax)
+  - **Address** - Physical address with components (street, city, state, zip, country)
+  - **Website** - URL(s)
+  - **Social media** - LinkedIn, Twitter, or other profiles
+
+  {%- if validate == "strict" %}
+  Validation rules:
+  - Email must match standard format (name@domain.tld)
+  - Phone numbers must be valid format (flag suspicious ones)
+  - Flag any potentially incomplete or malformed contact info
+  {%- endif %}
+
+  {%- if output_format == "json" %}
+  ```json
+  [
+    {{
+      "name": "Full Name",
+      "title": "Job Title",
+      "organization": "Company",
+      "email": ["email@example.com"],
+      "phone": [{{"number": "+1-555-0100", "type": "office"}}],
+      "address": {{"street": "", "city": "", "state": "", "zip": "", "country": ""}},
+      "website": "",
+      "social": {{}}
+    }}
+  ]
+  ```
+  {%- endif %}
+
+  If multiple contacts are found, list each one separately.
+  Note any ambiguous or incomplete information.
+parameters:
+  - name: text
+    type: string
+    required: true
+    description: "The text to extract contact information from"
+  - name: output_format
+    type: string
+    required: false
+    description: "Output format (json, table, vcard, csv)"
+    default: "json"
+  - name: validate
+    type: string
+    required: false
+    description: "Validation level (strict, basic, none)"
+    default: "basic"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 500
+  temperature: 0.1
+  tags: ["data-extraction", "contacts", "parsing", "CRM"]
+examples:
+  - input:
+      text: "For inquiries, contact Sarah Johnson, VP of Sales at TechCorp Inc. She can be reached at sarah.johnson@techcorp.com or (415) 555-0192. Office address: 500 Market Street, Suite 300, San Francisco, CA 94105. You can also reach her colleague Mike Chen, Engineering Director, at m.chen@techcorp.com or ext. 4521."
+      output_format: "json"
+      validate: "strict"
+    expected_output_contains: ["Sarah Johnson", "sarah.johnson@techcorp.com", "415", "Mike Chen", "TechCorp"]

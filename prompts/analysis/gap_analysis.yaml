@@ -1,0 +1,72 @@
+name: gap_analysis
+version: "1.0"
+category: analysis
+description: "Identify and analyze gaps between current state and desired state with actionable bridging strategies"
+template: |
+  Perform a gap analysis comparing the current state to the desired state.
+
+  Area of focus: {focus_area}
+  Priority framework: {priority}
+
+  Current State:
+  {current_state}
+
+  Desired State:
+  {desired_state}
+
+  Provide your gap analysis:
+
+  ## Gap Inventory
+  | Gap Area | Current State | Desired State | Gap Size | Priority |
+  |----------|--------------|---------------|----------|----------|
+
+  Rate gap size as: Small / Medium / Large / Critical
+  Rate priority as: P1 (Urgent) / P2 (High) / P3 (Medium) / P4 (Low)
+
+  ## Detailed Gap Assessment
+  For each significant gap:
+  - **Description** - What specifically is missing or insufficient
+  - **Root Cause** - Why this gap exists
+  - **Impact of Gap** - Consequences of not closing this gap
+  - **Resources Needed** - What is required to bridge the gap
+  - **Estimated Effort** - Time and cost to close
+
+  ## Bridging Strategy
+  - **Quick Wins** - Gaps that can be closed immediately with minimal effort
+  - **Short-Term Actions** (0-3 months) - Priority actions
+  - **Medium-Term Initiatives** (3-12 months) - Planned improvements
+  - **Long-Term Investments** (12+ months) - Strategic changes
+
+  ## Risk of Inaction
+  What happens if these gaps remain unaddressed?
+parameters:
+  - name: current_state
+    type: string
+    required: true
+    description: "Description of the current state, capabilities, or situation"
+  - name: desired_state
+    type: string
+    required: true
+    description: "Description of the target state, goals, or requirements"
+  - name: focus_area
+    type: string
+    required: false
+    description: "Area of focus (skills, technology, process, compliance, performance)"
+    default: "general"
+  - name: priority
+    type: string
+    required: false
+    description: "How to prioritize gaps (business-impact, effort, risk, strategic-alignment)"
+    default: "business-impact"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 900
+  temperature: 0.4
+  tags: ["analysis", "gap-analysis", "planning", "improvement"]
+examples:
+  - input:
+      current_state: "Team of 5 developers using manual deployments, no CI/CD, manual testing only, monolithic architecture, no monitoring, shared staging environment, deployments take 4 hours and happen bi-weekly."
+      desired_state: "Automated CI/CD pipelines, 90% test coverage, microservices architecture, real-time monitoring and alerting, isolated dev environments, deployments under 15 minutes, daily releases."
+      focus_area: "technology and process"
+      priority: "business-impact"
+    expected_output_contains: ["gap", "CI/CD", "testing", "monitoring", "quick win", "strategy"]

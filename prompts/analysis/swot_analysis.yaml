@@ -1,0 +1,68 @@
+name: swot_analysis
+version: "1.0"
+category: analysis
+description: "Generate a comprehensive SWOT (Strengths, Weaknesses, Opportunities, Threats) analysis"
+template: |
+  Perform a SWOT analysis based on the following information.
+
+  Subject: {subject}
+  Industry/Context: {industry}
+  Time horizon: {time_horizon}
+
+  Information:
+  {information}
+
+  Provide a thorough SWOT analysis:
+
+  ## Strengths (Internal, Positive)
+  - List 4-6 key internal strengths with brief explanations
+  - Focus on capabilities, resources, and competitive advantages
+
+  ## Weaknesses (Internal, Negative)
+  - List 4-6 key internal weaknesses with brief explanations
+  - Focus on limitations, gaps, and areas needing improvement
+
+  ## Opportunities (External, Positive)
+  - List 4-6 external opportunities with brief explanations
+  - Focus on market trends, technology shifts, and unmet needs
+
+  ## Threats (External, Negative)
+  - List 4-6 external threats with brief explanations
+  - Focus on competitive pressures, regulatory changes, and market risks
+
+  ## Strategic Implications
+  - **SO Strategies** (use Strengths to capture Opportunities)
+  - **WO Strategies** (overcome Weaknesses by exploiting Opportunities)
+  - **ST Strategies** (use Strengths to mitigate Threats)
+  - **WT Strategies** (minimize Weaknesses and avoid Threats)
+parameters:
+  - name: information
+    type: string
+    required: true
+    description: "Background information, data, and context for the analysis"
+  - name: subject
+    type: string
+    required: true
+    description: "The company, product, project, or initiative to analyze"
+  - name: industry
+    type: string
+    required: false
+    description: "Industry or market context"
+    default: "not specified"
+  - name: time_horizon
+    type: string
+    required: false
+    description: "Time frame for the analysis (short-term, medium-term, long-term)"
+    default: "medium-term (1-3 years)"
+metadata:
+  recommended_model: "gemini-2.5-flash-lite"
+  expected_tokens: 1000
+  temperature: 0.5
+  tags: ["analysis", "SWOT", "strategy", "planning"]
+examples:
+  - input:
+      information: "TechStartup Inc. has a team of 20 experienced AI engineers, $5M in funding, and a unique NLP patent. Revenue is $500K ARR with 15% monthly growth. However, the company has no dedicated sales team, limited brand awareness, and depends on a single cloud provider. The AI market is growing 40% YoY. New EU AI regulations are incoming. Two well-funded competitors recently entered the space."
+      subject: "TechStartup Inc."
+      industry: "AI/ML SaaS"
+      time_horizon: "medium-term (1-3 years)"
+    expected_output_contains: ["strength", "weakness", "opportunity", "threat", "strategy"]
