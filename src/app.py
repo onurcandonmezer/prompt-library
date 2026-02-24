@@ -10,7 +10,6 @@ import os
 from pathlib import Path
 
 import streamlit as st
-import yaml
 
 from src.prompt_manager import PromptManager
 from src.prompt_tester import PromptTester
@@ -116,7 +115,8 @@ def render_search_page(manager: PromptManager):
 def render_test_page(manager: PromptManager):
     st.header("Test Prompts")
 
-    api_key = st.text_input("Gemini API Key", type="password", value=os.environ.get("GEMINI_API_KEY", ""))
+    default_key = os.environ.get("GEMINI_API_KEY", "")
+    api_key = st.text_input("Gemini API Key", type="password", value=default_key)
 
     if not api_key:
         st.warning("Enter your Gemini API key to test prompts.")
@@ -153,7 +153,9 @@ def render_test_page(manager: PromptManager):
                 result = tester.test_prompt(prompt.file_path, test_input=inputs)
 
             if result.passed:
-                st.success(f"Passed — Quality: {result.quality_score:.1f}/10, Latency: {result.latency_ms:.0f}ms")
+                score = result.quality_score
+                latency = result.latency_ms
+                st.success(f"Passed — Quality: {score:.1f}/10, Latency: {latency:.0f}ms")
             else:
                 st.error(f"Failed — {result.error or 'Missing keywords'}")
 

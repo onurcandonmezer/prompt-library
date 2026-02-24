@@ -72,8 +72,7 @@ class Prompt:
             "description": self.description,
             "template": self.template,
             "parameters": [
-                {"name": p.name, "type": p.type, "required": p.required}
-                for p in self.parameters
+                {"name": p.name, "type": p.type, "required": p.required} for p in self.parameters
             ],
             "metadata": {
                 "recommended_model": self.metadata.recommended_model,
@@ -184,9 +183,7 @@ class PromptManager:
         return {
             "total_prompts": len(prompts),
             "categories": len(categories),
-            "category_counts": {
-                cat: len(self.get_by_category(cat)) for cat in categories
-            },
+            "category_counts": {cat: len(self.get_by_category(cat)) for cat in categories},
             "models_used": list(set(p.metadata.recommended_model for p in prompts)),
         }
 

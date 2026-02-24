@@ -4,7 +4,6 @@ from pathlib import Path
 
 from src.prompt_manager import PromptManager
 
-
 PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
 
 
@@ -18,8 +17,14 @@ class TestPromptManager:
 
     def test_get_categories(self):
         categories = self.manager.get_categories()
-        expected = {"summarization", "analysis", "code_generation", "content_creation",
-                    "data_extraction", "customer_service"}
+        expected = {
+            "summarization",
+            "analysis",
+            "code_generation",
+            "content_creation",
+            "data_extraction",
+            "customer_service",
+        }
         assert expected.issubset(set(categories))
 
     def test_get_by_category(self):
@@ -52,7 +57,8 @@ class TestPromptManager:
         prompt = self.manager.get_prompt("executive_summary")
         if prompt and prompt.examples:
             rendered = prompt.render(**prompt.examples[0].input)
-            assert "{document}" not in rendered or "document" not in [p.name for p in prompt.parameters]
+            param_names = [p.name for p in prompt.parameters]
+            assert "{document}" not in rendered or "document" not in param_names
 
     def test_get_stats(self):
         stats = self.manager.get_stats()

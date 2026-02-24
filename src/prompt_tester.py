@@ -60,10 +60,11 @@ class BatchTestResult:
             f"Avg Latency: {self.avg_latency_ms:.0f}ms",
         ]
         if self.failed > 0:
-            lines.append(f"\nFailed tests:")
+            lines.append("\nFailed tests:")
             for r in self.results:
                 if not r.passed:
-                    lines.append(f"  - {r.prompt_name}: {r.error or 'Missing keywords: ' + ', '.join(r.missing_keywords)}")
+                    msg = r.error or ("Missing keywords: " + ", ".join(r.missing_keywords))
+                    lines.append(f"  - {r.prompt_name}: {msg}")
         return "\n".join(lines)
 
 
@@ -177,12 +178,8 @@ class PromptTester:
             results.append(result)
 
         passed = sum(1 for r in results if r.passed)
-        avg_quality = (
-            sum(r.quality_score for r in results) / len(results) if results else 0
-        )
-        avg_latency = (
-            sum(r.latency_ms for r in results) / len(results) if results else 0
-        )
+        avg_quality = sum(r.quality_score for r in results) / len(results) if results else 0
+        avg_latency = sum(r.latency_ms for r in results) / len(results) if results else 0
 
         return BatchTestResult(
             total=len(results),

@@ -4,7 +4,6 @@ from pathlib import Path
 
 from src.prompt_tester import PromptTester
 
-
 PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
 
 
