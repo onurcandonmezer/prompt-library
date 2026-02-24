@@ -54,8 +54,9 @@ make install
 # Browse prompts
 python -m src.prompt_manager list
 
-# Test a prompt with Gemini API
-export GEMINI_API_KEY="your-api-key"
+# Test a prompt with Gemini API (bring your own key)
+cp .env.example .env  # then add your GEMINI_API_KEY
+export GEMINI_API_KEY="your-api-key-here"
 python -m src.prompt_tester --prompt prompts/summarization/executive_summary.yaml
 
 # Launch the Streamlit UI
@@ -84,7 +85,7 @@ print(f"Recommended Model: {prompt.metadata.recommended_model}")
 ```python
 from src.prompt_tester import PromptTester
 
-tester = PromptTester(api_key="your-gemini-key")
+tester = PromptTester(api_key=os.environ["GEMINI_API_KEY"])
 result = tester.test_prompt(
     prompt_path="prompts/summarization/executive_summary.yaml",
     test_input="Your test document text here...",
